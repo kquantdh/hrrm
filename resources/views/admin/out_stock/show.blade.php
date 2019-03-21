@@ -75,8 +75,9 @@
                                         <th> User Out</th>
                                         <th> User Return</th>
                                         <th> Part Out No</th>  
-                                        <th> Date Out</th>                                      
-                                        <th> Date Return</th>
+                                        <th> Date Out</th>
+                                    <!--<th> Date Return</th>-->
+                                        <th> Remain Date</th>
                                         <th> Customer</th>
                                         <th> Type Form</th>
                                         <th> Status</th>
@@ -87,6 +88,7 @@
                                     </thead>
                                     <tfoot>
                                     <tr>
+
                                         <th> </th>
                                         <th> </th>
                                         <th> </th>
@@ -127,9 +129,15 @@
                                             @endif
 
                                         </td>
-                                        <td>
+                                        <!--<td>
                                             @if( isset($item->return_date) )
                                                 {{date('d-m-Y',strtotime($item->return_date))}}
+                                            @endif
+
+                                        </td>-->
+                                        <td>
+                                            @if(($item->status)!=5)
+                                            {{($item->loan_date_no)-(floor(((time()-strtotime($item->out_date))/(60*60*24))))}}
                                             @endif
 
                                         </td>

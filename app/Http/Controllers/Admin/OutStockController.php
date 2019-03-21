@@ -40,6 +40,8 @@ class OutStockController extends Controller
         $stt = ((int)$page-1)*$limit;
         $out_stocks=Out_stock::select('out_stocks.*')
                          ->join('users','out_stocks.user_id','=','users.id');
+
+
         $out_stocks->where('users.name','like','%'.$request->keyword.'%')
                         ->orwhere('out_stocks.out_no','like','%'.$request->keyword.'%')
                         ->orwhere('out_stocks.remark','like','%'.$request->keyword.'%');                        
