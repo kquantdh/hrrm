@@ -11,7 +11,7 @@
                         <div class="portlet-title">
                             <div class="caption font-dark">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject bold uppercase"> Detail Out : @foreach($out_stock_details as  $item){{$out_stock_details->barcode;}} @endforeach</span>
+                                <span class="caption-subject bold uppercase"> Detail Out : </span>
                             </div>
                         </div>
                         <div class="portlet-body">
