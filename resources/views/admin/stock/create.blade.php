@@ -142,8 +142,8 @@
                                             <input id="input-cart-number" type="text" name="number" value="{{$item->options->number}}" style="width:100%" maxlength="15"/></td>
                                         <td style="width:11%" >
                                                 <input id="input-cart-location"type="text" name="location" value="{{$item->options->location}}" style="width:100%" maxlength="15"/></td>
-                                        <td style="width:11%" >
-                                            <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%" maxlength="15"/></td>
+                                        <td style="width:15%" >
+                                            <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%" /></td>
                                         <td style="width:15%" >
                                             <input type="number" name="qty" value="{{$item->qty}}" style="width:30%" maxlength="2"/>
                                             <input type="submit" value="Update"/></td>
