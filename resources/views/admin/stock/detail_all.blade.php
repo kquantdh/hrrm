@@ -11,7 +11,10 @@
                         <div class="portlet-title">
                             <div class="caption font-dark">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject bold uppercase"> Detail Out :</span>
+
+                                <span class="caption-subject bold uppercase"> Detail Out : </span>
+
+
                             </div>
                         </div>
                         <div class="portlet-body">
