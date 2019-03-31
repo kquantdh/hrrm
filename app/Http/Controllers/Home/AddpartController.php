@@ -37,11 +37,26 @@ class AddpartController extends Controller
 
     public function muahang($id)
     {
+        $array_tmp=array();
         $buy = Part_price_list::where('id', $id)->first();
-        cart::add(array('id' => $buy->id, 'name' => $buy->name, 'qty' => 1, 'price' => $buy->price,
+        foreach(Cart::instance('createFujiService')->content() as $item){
+            array_push($array_tmp,$item->id);
+        }
+        cart::instance('createFujiService')->add(array('id' => $buy->id, 'name' => $buy->name, 'qty' => 1, 'price' => $buy->price,
             'options' => array( 'description' => $buy->description,'rep_new'=>$buy->rep_new)));
+    
+        $temp=$buy->id;
+       if(in_array( $temp,$array_tmp,true)) {
+            Session::flash('fail', 'You clicked over 1 time for one part. Please choose other part!');
+        }else {
+            cart::instance('createFujiService')->add(array('id' => $buy->id, 'name' => $buy->name, 'qty' => 1, 'price' => $buy->price,
+                'options' => array( 'description' => $buy->description,'rep_new'=>$buy->rep_new)));
+        }
         return redirect()->back();
     }
+
+
+
 
     public function getCart($id)
     {
@@ -147,31 +162,28 @@ class AddpartController extends Controller
 
     public function update(Request $request, $id){
 
+
         $this->validate($request, [
-            'sr_no' => 'required',
-           /* 'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'short_description' => 'required',
-            'description' => 'required',
-            'discount' => 'numeric'*/
+            'entry' => 'integer',
+            'discount' => 'integer',
+            'normal_hrs' => 'numeric',
+            'night_hrs' => 'numeric',
+            'off_hrs' => 'numeric',
+            'normal_hrs' => 'numeric',
+            'holiday_hrs' => 'numeric',
         ],
             [
-                'required' => ':attribute  is not blank',
-                'integer' => ':attribute phải là số nguyên',
-                'numeric' => ':attribute phải là số',
+                'required' => ':Attribute  is not blank',
+                'integer' => ':Attribute must be integer number',
+                'numeric' => ':Attribute must be numeric',
             ],
 
             [
-                'sr_no' => 'Service Report No ',
-               /* 'price' => 'Giá ',
-                'thumbnail' => 'Ảnh đại diện ',
-                'quantity' => 'Số lượng ',
-                'short_description' => 'Mô tả ngắn ',
-                'description' => 'Mô tả chi tiết',
-                'discount' => 'Giảm giá'*/
+
             ]);
         $fuji_service = Fuji_service::findOrFail($id); 
         $fuji_service->customer_id = $request->customer_id;
+        $fuji_service->job_type = $request->job_type;
         $fuji_service->quotation = $request->quotation;
         $fuji_service->po = $request->po;
         $fuji_service->sr_no = $request->sr_no;
@@ -180,10 +192,15 @@ class AddpartController extends Controller
         $fuji_service->head_serial = $request->head_serial;
         $fuji_service->nature_service = $request->nature_service;
         $fuji_service->status = $request->status;
+        $fuji_service->entry = $request->entry;
+        $fuji_service->discount = $request->discount;
+        $fuji_service->normal_hrs = $request->normal_hrs;
+        $fuji_service->night_hrs = $request->night_hrs;
+        $fuji_service->off_hrs = $request->off_hrs;
+        $fuji_service->holiday_hrs = $request->holiday_hrs;
         $fuji_service->problem=$request->problem;
         $fuji_service->countermeasure=$request->countermeasure;               
-        $fuji_service->save(); 
-        $ord = new Fuji_service();
+        $fuji_service->save();
         $list1 = Fuji_service_detail::where('fuji_service_id', $id)->get();  
         $array_tmp = array();
         foreach($list1 as $data1){

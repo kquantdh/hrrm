@@ -15,6 +15,18 @@ class CreateInStockDetailsTable extends Migration
     {
         Schema::create('in_stock_details', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('in_stock_id');
+            $table->integer('number');
+            $table->string('barcode');
+            $table->string('part_id');
+            $table->string('name');
+            $table->string('belongto');
+            $table->integer('quantity');
+            $table->integer('balance');
+            $table->string('location');
+            $table->string('thumbnail')->nullable($value=true);
+            $table->string('detail')->nullable($value=true);
+            $table->boolean('is_deleted')->nullable($value=true);
             $table->timestamps();
         });
     }

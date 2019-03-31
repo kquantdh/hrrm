@@ -60,7 +60,7 @@ class HeadTypeController extends Controller
         $c->price = $request->price;
         $c->save();
 
-        return redirect('admin/head_type');
+        return redirect('admin/headtype');
     }
 
     /**

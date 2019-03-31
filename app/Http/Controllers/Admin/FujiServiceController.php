@@ -33,8 +33,9 @@ class FujiServiceController extends Controller
         } 
     }
 
-    public function index()
+    public function index(Request $request)
     {
+
         $fuji_services=Fuji_service::all();
         $customers_=Customer::all();
         $head_types=Head_type::all();
@@ -64,6 +65,23 @@ class FujiServiceController extends Controller
             'list' => $list]);
     }
 
+    public function quotation($id)
+    {
+        $fuji_service = Fuji_service::where('id', $id)->first();
+        $fuji_service->save();
+        $list = Fuji_service_detail::where('fuji_service_id', $id)->get();
+        return view('admin.fuji_service.quotation',
+            ['fuji_service'=>$fuji_service,
+                'list' => $list]);
+    }
+    public function report($id)
+    {
+        return Excel::download(new HistoryExport($id), 'quotation.xlsx');
+
+    }
+
+
+
     public function create(Request $request)
     {   
         $limit = 5;
@@ -83,60 +101,9 @@ class FujiServiceController extends Controller
                 ]);
     }
 
-    
-    /*public function store(Request $request)
-    {
-        $p=new Fuji_service();
-        $p->sr_no = $request->sr_no;
-        $p->customer_id=$request->customer_id;
-        $p->head_type_id=$request->head_type_id;
-        $p->head_serial=$request->head_serial;
-        $p->status=$request->status;
-        $p->nature_service=$request->nature_service;
-        $p->problem=htmlentities($request->problem);
-        $p->action=htmlentities($request->action);
-        $p->price=$request->price;
-        $officialDate = Carbon::now();
-        switch ($request->status){
-            case "Stock Recieve":
-                $p->stock_recieve_date=$officialDate;
-                break;
-            case "Start Inspection":
-                $p->start_inspection_date=$officialDate;
-                break;
-            case "Inspection Done":
-                $p->inspection_done_date=$officialDate;
-                break;
-            case "Sent Quotation":
-                $p->sent_quotation_date=$officialDate;
-                break;
-            case "Got PO":
-                $p->got_po_date=$officialDate;
-                break;
-            case "Got Part":
-                $p->got_part_date=$officialDate;
-                break;
-            case "Repair Done":
-                $p->repair_done_date=$officialDate;
-                break;
-            case "Delivery":
-                $p->delevery_date=$officialDate;
-                break;
 
-        }
 
-        //$p->thumbnail = $thumbnail;
-        $p->save();
 
-        return redirect('admin/fujiservice');
-    }*/
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
@@ -170,11 +137,30 @@ class FujiServiceController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->payment == 0) {
+        $this->validate($request, [
+            'entry' => 'integer',
+            'discount' => 'integer',
+            'discount_part' => 'integer',
+            'normal_hrs' => 'numeric',
+            'night_hrs' => 'numeric',
+            'off_hrs' => 'numeric',
+            'normal_hrs' => 'numeric',
+            'holiday_hrs' => 'numeric',
+            'person_amount' => 'integer',
+        ],
+            [
+                'required' => ':Attribute  is not blank',
+                'integer' => ':Attribute must be integer number',
+                'numeric' => ':Attribute must be numeric',
+            ],
 
-            if (count(Cart::content()) > 0) {
+            [
+
+            ]);
+
                 $ord = new Fuji_service();
                 $ord->customer_id = $request->customer_id;
+                $ord->job_type = $request->job_type;
                 $ord->quotation = $request->quotation;
                 $ord->po = $request->po;
                 $ord->sr_no = $request->sr_no;
@@ -183,37 +169,43 @@ class FujiServiceController extends Controller
                 $ord->head_serial = $request->head_serial;
                 $ord->nature_service = $request->nature_service;
                 $ord->status = $request->status;
+                $ord->entry = $request->entry;
+                $ord->discount = $request->discount;
+                $ord->discount_part = $request->discount_part;
+                $ord->normal_hrs = $request->normal_hrs;
+                $ord->night_hrs = $request->night_hrs;
+                $ord->off_hrs = $request->off_hrs;
+                $ord->holiday_hrs = $request->holiday_hrs;
+                $ord->person_amount = $request->person_amount;
                 $ord->problem =$request->problem;
                 $ord->countermeasure = $request->countermeasure;
                 $ord->save();
+                $temp=Customer::where('id', $request->customer_id)->first();
+        $chargeTransport=($request->entry*$temp->transport_price);
+        $chargeNormal=($request->person_amount*(1-($request->discount/100))*($temp->normal_hrs*$request->normal_hrs));
+        $chargeNight=($request->person_amount*(1-($request->discount/100))*($temp->night_hrs*$request->night_hrs));
+        $chargeOff=($request->person_amount*(1-($request->discount/100))*($temp->off_hrs*$request->off_hrs));
+        $chargeHoliday=($request->person_amount*(1-($request->discount/100))*($temp->holiday_hrs*$request->holiday_hrs));
+        $ord->service_amount = $chargeTransport+$chargeNormal+$chargeOff+$chargeNight+$chargeHoliday;
+                 $ord->save();
                 $amount = 0;
-                foreach (Cart::content() as $sp) {
+                foreach (Cart::instance('createFujiService')->content() as $sp) {
                     $ordDetail = new Fuji_service_detail();
                     $ordDetail->fuji_service_id = $ord->id;
                     $ordDetail->part_id = $sp->id;
                     $ordDetail->name = $sp->name;
-                    
-                    $ordDetail->vn_name = $sp->options->vn_name;
-                    $ordDetail->location = $sp->options->location;
                     $ordDetail->price = $sp->price;
                     $ordDetail->quantity = $sp->qty;
-                    $ordDetail->amount = $sp->price * $sp->qty;
                     $ordDetail->save();
                     $amount += ($sp->price * $sp->qty);
                 }
+                $ord->part_amount = $amount;
                 $ord->save();
-            }
+
             Cart::destroy();
             Session::flash('success', 'Add new successfull!');
             return redirect('/admin/fujiservice');
-        }
-        else {
-            if (count(Cart::content()) > 0) {
-                $amount = Cart::subtotal();
 
-                return redirect()->away();
-            }
-        }
     }
 
     /**
@@ -225,6 +217,7 @@ class FujiServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $prd = Part_price_list::findOrFail($id);
         if ($prd->quantity > 0 && $prd->quantity >= $request->qty) {
             $content = Cart::content();
@@ -240,69 +233,8 @@ class FujiServiceController extends Controller
         }
 
         return redirect('admin/fujiservice/create/edit/'.$id);
-        /*$fuji_services=Fuji_service::findOrFail($id);
-        /* $thumbnail=$product->thumbnail;
-         if($request->hasFile('thumbnail')){
-             $file=$request->file('thumbnail');
-             $thumbnail=$file->getClientOriginalName();
-             $path=public_path('uploads/product');
-             $file->move($path,$thumbnail);
-         }
-
-         /*$product->title=$request->title;
-         $product->head_type_id=$request->head_type_id;
-         $product->price=$request->price;
-         $product->thumbnail = $thumbnail;
-         $product->save();*/
-        /*$fuji_services->sr_no = $request->sr_no;
-        $fuji_services->customer_id=$request->customer_id;
-        $fuji_services->head_type_id=$request->head_type_id;
-        $fuji_services->head_serial=$request->head_serial;
-        $fuji_services->status=$request->status;
-        $fuji_services->nature_service=$request->nature_service;
-        $fuji_services->problem=$request->problem;
-        $fuji_services->action=$request->action;
-        $fuji_services->price=$request->price;
-
-        $officialDate = Carbon::now();
-        switch ($request->status){
-            case "Stock Recieve":
-                $fuji_services->stock_recieve_date=$officialDate;
-                break;
-            case "Start Inspection":
-                $fuji_services->start_inspection_date=$officialDate;
-                break;
-            case "Inspection Done":
-                $fuji_services->inspection_done_date=$officialDate;
-                break;
-            case "Sent Quotation":
-                $fuji_services->sent_quotation_date=$officialDate;
-                break;
-            case "Got PO":
-                $fuji_services->got_po_date=$officialDate;
-                break;
-            case "Got Part":
-                $fuji_services->got_part_date=$officialDate;
-                break;
-            case "Repair Done":
-                $fuji_services->repair_done_date=$officialDate;
-                break;
-            case "Delivery":
-                $fuji_services->delevery_date=$officialDate;
-                break;
-
-        }
-
-        $fuji_services->save();
-        return redirect('admin/fujiservice');*/
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
 
     public function updateEdit(Request $request, $id)

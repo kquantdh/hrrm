@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBarcodesTable extends Migration
+class CreateInStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,14 @@ class CreateBarcodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('barcodes', function (Blueprint $table) {
+        Schema::create('in_stocks', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
+            $table->string('inv_no');
+            $table->string('po_no');
+            $table->text('remark')->nullable($value=true);
+            $table->date('in_date');
+            $table->boolean('is_deleted')->nullable($value=true);
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ class CreateBarcodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('barcodes');
+        Schema::dropIfExists('in_stocks');
     }
 }

@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateCustomersTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('customers', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('full_name');
+            $table->string('address');
+            $table->string('tax')->nullable($value=true);
+            $table->string('mobile');
+            $table->string('person');
+            $table->float('usd_rate');
+            $table->float('jpy_rate');
+            $table->float('normal_hrs');
+            $table->float('night_hrs');
+            $table->float('off_hrs');
+            $table->float('holiday_hrs');
+            $table->float('transport_price',12,2);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('customers');
+    }
+}

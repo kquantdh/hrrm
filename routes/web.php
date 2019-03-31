@@ -59,22 +59,28 @@ Route::group(['middleware'=>['auth.basic']],function (){
 Route::group(['middleware'=>['ckAdmin']],function (){
 
     Route::get('muahang/{id}', 'Admin\AddpartController@muahang');
+    Route::get('edit_muahang/{id}', 'Admin\AddpartController@editMuaHang');
     Route::get('getcart/{id}', 'Admin\AddpartController@getCart');
+    Route::get('admin/fujiservice/reset_cart','Admin\AddpartController@resetCart');
     Route::get('admin/fujiservice/create/delete/{id}', 'Admin\AddpartController@deleteorder');
     Route::post('admin/fujiservice/create/update-cart/{id}', 'Admin\AddpartController@updateCart');
     Route::get('admin/fujiservice/create/edit/{id}','Admin\AddpartController@edit');
     Route::post('admin/fujiservice/create/edit/update-edit-cart/{id}', 'Admin\AddpartController@updateEditCart');
     Route::get('admin/fujiservice/create/edit/delete/{id}', 'Admin\AddpartController@deleteorderEdit');
+    Route::get('admin/fujiservice/create/edit/delete_all_edit/{id}', 'Admin\AddpartController@deleteAllEdit');
     Route::patch('admin/fujiservice/create/edit/{id}', 'Admin\AddpartController@update');
 
 
-    Route::get('admin/fujiservice','Admin\FujiServiceController@index');        
-    Route::get('admin/fujiservice/create','Admin\FujiServiceController@create');   
+    Route::get('admin/fujiservice','Admin\FujiServiceController@index');
+    Route::get('admin/fujiservice/create','Admin\FujiServiceController@create');
     Route::post('admin/fujiservice/create', 'Admin\FujiServiceController@store'); 
     Route::get('admin/fujiservice/delete/{id}','Admin\FujiServiceController@delete');
     Route::get('admin/fujiservice/report/{id}','Admin\FujiServiceController@serviceReportPDF');
     Route::get('admin/fujiservice/service-report/{id}','Admin\FujiServiceController@serviceReport');
     Route::get('admin/fujiservice/head-repair-report/{id}','Admin\FujiServiceController@headRepairReport');
+    Route::get('admin/fujiservice/quotation/{id}','Admin\FujiServiceController@quotation');
+    Route::get('admin/report','Admin\FujiServiceController@report');
+    Route::get('admin/fujiservice/excel/{id}','Admin\FujiServiceController@report');
     
     
     Route::resource('admin/headtype','Admin\HeadTypeController');

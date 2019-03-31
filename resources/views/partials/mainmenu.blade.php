@@ -38,7 +38,7 @@
                             <a href="{{ url('admin/fujiservice') }}"> Head Repair Center </a>
                         </li>
                         <li aria-haspopup="true" class=" ">
-                            <a href="ui_timeline.html"> Report</a>
+                            <a href="{{ url('admin/report') }}"> Report</a>
                         </li>
 
 

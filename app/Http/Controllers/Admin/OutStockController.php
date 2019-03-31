@@ -43,8 +43,7 @@ class OutStockController extends Controller
 
 
         $out_stocks->where('users.name','like','%'.$request->keyword.'%')
-                        ->orwhere('out_stocks.out_no','like','%'.$request->keyword.'%')
-                        ->orwhere('out_stocks.remark','like','%'.$request->keyword.'%');                        
+            ->orwhere('out_stocks.remark','like','%'.$request->keyword.'%');
                         
         $out_stocks=$out_stocks->orderBy('id', 'DESC')->paginate(10);
         
@@ -248,7 +247,7 @@ class OutStockController extends Controller
         }else {
             Cart::instance('createOutstock')->add(array('id' => $buy->barcode,
             'name' => $buy->name, 
-            'qty' => 1, 
+            'qty' => 1,
             'price' => 1,
     'options' => array(  'part_no'=>$buy->part_id,
             'rep_new'=>$buy->rep_new,

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title') Detail @endsection
+@section('title') Quotation @endsection
 @section('content')
     <div class="page-content">
         <div class="container">

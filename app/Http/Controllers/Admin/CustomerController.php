@@ -56,12 +56,16 @@ class CustomerController extends Controller
             'mobile' => 'required',
             'person' => 'required',
             'transport_price' => 'required|numeric',
+            'normal_hrs' => 'required|numeric',
+            'night_hrs' => 'required|numeric',
+            'holiday_hrs' => 'required|numeric',
+            'off_hrs' => 'required|numeric',
             
         ],
             [
-                'required' => ':attribute  is not blank',
-                'integer' => ':attribute must be  int number',
-                'numeric' => ':attribute must be  number',
+                'required' => ':Attribute  is not blank',
+                'integer' => ':Attribute must be  int number',
+                'numeric' => ':Attribute must be  number',
             ],
 
             [
@@ -83,6 +87,10 @@ class CustomerController extends Controller
         $c->transport_price = $request->transport_price;
         $c->usd_rate = $request->usd_rate;
         $c->jpy_rate = $request->jpy_rate;
+        $c->normal_hrs = $request->normal_hrs;
+        $c->night_hrs = $request->night_hrs;
+        $c->holiday_hrs = $request->holiday_hrs;
+        $c->off_hrs = $request->off_hrs;
         $c->save();
         Session::flash('success',"Create successfull");
         return redirect('admin/customer');
@@ -123,6 +131,35 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'full_name' => 'required',
+            'address' => 'required',
+            'mobile' => 'required',
+            'person' => 'required',
+            'transport_price' => 'required|numeric',
+            'normal_hrs' => 'required|numeric',
+            'night_hrs' => 'required|numeric',
+            'holiday_hrs' => 'required|numeric',
+            'off_hrs' => 'required|numeric',
+
+        ],
+            [
+                'required' => ':Attribute  is not blank',
+                'integer' => ':Attribute must be  int number',
+                'numeric' => ':Attribute must be  number',
+            ],
+
+            [
+                'name' => 'Name ',
+                'full_name' => 'Customer Full Name ',
+                'address' => 'Address ',
+                'mobile' => 'Mobile ',
+                'person' => 'Person ',
+                'transport_price' => 'Transport_price'
+
+
+            ]);
         $customers=Customer::findOrFail($id);
         $customers->name=$request->name;
         $customers->full_name = $request->full_name;
@@ -132,6 +169,10 @@ class CustomerController extends Controller
         $customers->transport_price = $request->transport_price;
         $customers->usd_rate = $request->usd_rate;
         $customers->jpy_rate = $request->jpy_rate;
+        $customers->off_hrs = $request->off_hrs;
+        $customers->normal_hrs = $request->normal_hrs;
+        $customers->night_hrs = $request->night_hrs;
+        $customers->holiday_hrs = $request->holiday_hrs;
         $customers->save();
         Session::flash('success',"Update successful");
         return redirect('admin/customer');

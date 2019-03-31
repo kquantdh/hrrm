@@ -4,22 +4,6 @@
 @section('formName') Create head history @endsection
 
 @section('content')
-
-@if(Session::has('fail'))
-                                        <div class="row">
-                                            <!-- Welcome -->
-                                            <div class="col-lg-12">
-                                                <div class="alert alert-info">
-                                                    <i class="fa fa-folder-open"></i>
-                                                    <b>{{Session::get('success')}}</b>
-                                                </div>
-                                            </div>
-                                            <!--end  Welcome -->
-                                        </div>
-                                        @endif
- 
-          
-
         <div class="row">
             <div class="col-md-12">
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -34,8 +18,30 @@
 
 
                             <div class="table-toolbar">
+                                <div class="row">
+                                    @if(Session::has('fail'))
+                                        <div class="container margin-top-10">
+                                            <div class="col-sm-12">
+                                                <div class="alert alert-warning red">
+                                                    <b>{{ Session::get('fail') }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @elseif(Session::has('success'))
+
+                                        <div class="container margin-top-10">
+                                            <div class="col-sm-12">
+                                                <div class="alert alert-warning red">
+                                                    <b>{{ Session::get('fail') }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                    @endif
+                                </div>
                                     
                                     <div class="row">
+
                                             <div class="col-md-6">    
                                                     {!! Form::open(['method'=>'GET','url'=>'admin/fujiservice/create']) !!}
                                                     {!!Form::label('sample_file','Typing :',['class'=>'col-md-3'])!!}
@@ -59,7 +65,6 @@
                                 
                                 <th class="numeric"> Part No </th>
                                 <th class="numeric"> Part Name </th>
-                                <th class="numeric"> Description </th>
                                 <th class="numeric"> Repnews </th>
                                 <th class="numeric"> Machine</th>
                                 <th class="numeric"> Price </th>
@@ -75,8 +80,7 @@
                                         <td class="center">{{($stt++)+1}}  </td>
                                         <td class="center"> {{$item->id}} </td>
                                         <td class="center">{{$item->name}}</td>
-                                        <td class="center">{{$item->description}}</td>
-                                        <td class="center">{{$item->rep_new}}</td>
+                                        <td class="center">{!! $item->rep_new!!}</td>
                                         <td class="center">{{$item->machine}}</td>
                                         <td class="center"> {{$item->price}} </td>
                                         <td class="center"> {{$item->vn_name}}</td>
@@ -114,50 +118,43 @@
                         <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1_2">
                             <thead>
                             <tr>
-                                <th class="numeric">  </th>
-                                <th class="numeric"> Part No </th>
-                                <th class="numeric"> Part Name </th>
-                                <th class="numeric"> Description </th>
-                                <th class="numeric"> Repnews </th>
-                                <th class="numeric"> Price </th>
-                                <th class="numeric"> Q'ty </th>
-                                <th class="numeric"> Action </th>
+                                <th>  </th>
+                                <th> Part No </th>
+                                <th> Part Name </th>
+                                <th> Repnews </th>
+                                <th> Price </th>
+                                <th> Q'ty </th>
+                                <th> Action </th>
                             </tr>
                             </thead>
-                            <tfoot>
-                            </tfoot>
+                            <tfoot></tfoot>
                             <tbody>
-                            @if(Cart::count() > 0)
-                                @foreach(Cart::content() as $item)
+                            @if(Cart::instance('createFujiService')->count() > 0)
+                                @foreach(Cart::instance('createFujiService')->content() as  $item)
                                     <tr class="odd gradeX">
-                                        <td class="center"> </td>
-                                        <td class="center"> {{$item->id}}</td>
-                                        <td class="center">{{$item->name}}</td>
-                                        <td class="center">{{$item->options->description}}</td>
-                                        <td class="center">{{$item->options->rep_new}}</td>
-                                        
-                                        <td class="center">{{$item->price}}</td>
-                                        
-                                        <td class="center">
+                                        <td> </td>
+                                        <td> {{$item->id}}</td>
+                                        <td>{{$item->name}}</td>
+                                        <td >{!! $item->options->rep_new !!}</td>
+                                        <td>{{$item->price}}</td>
+                                        <td style="width:15%">
                                             {!! Form::open(['method' => 'POST','url' => [ 'admin/fujiservice/create/update-cart', $item->id]]) !!}
-                                            <input type="number" name="qty" value="{{$item->qty}}" width="5" maxlength="2"/>
-                                            <input type="submit" value="Update"/>
+                                            <input type="number" name="qty" value="{{$item->qty}}"  style="width:25%"/>
+                                            <input type="submit" value="Update"  style="width:35%"/>
                                             {!! Form::close() !!}
                                         </td>
-                                        
-                                        
                                         <td><a href="{{ url('admin/fujiservice/create/delete/'.$item->id) }}">Delete </a> <br/></td>
                                     </tr>
                                 @endforeach
                             @endif
                             </tbody>
-                            <tfoot>
+                           <!-- <tfoot>
                                 <tr>
                                     <td colspan="6" rowspan="2"></td>
                                     <td colspan="1">Total : <b style="color: red;">{{ Cart::subtotal(0, ".", ",") }} VND</b></td>
                                     
                                 </tr>
-                                </tfoot>
+                                </tfoot>-->
                         </table>
                     </div>
                 </div>

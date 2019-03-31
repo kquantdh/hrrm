@@ -35,7 +35,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="btn-group">
-                                                <a href="{{ url('admin/fujiservice/create') }}" id="sample_editable_1_2_new" class="btn sbold green"> Add New
+                                                <a href="{{ url('admin/fujiservice/reset_cart') }}" id="sample_editable_1_2_new" class="btn sbold green"> Add New
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </div>
@@ -74,6 +74,7 @@
                                         </th>
                                         <th> HRR No </th>
                                         <th> Cust. </th>
+                                        <th> Type </th>
                                         <th> Quotion</th>
                                         <th> PO</th>
                                         <th> SR No </th>
@@ -99,6 +100,7 @@
                                         <th> </th>
                                         <th> </th>
                                         <th> </th>
+                                        <th> </th>
                                         
                                     </tr>
                                     </tfoot>
@@ -112,6 +114,29 @@
                                         </td>
                                         <td> HRR18{{$item->id}} </td>
                                         <td class="center"> {{$item->customer->name}}  </td>
+                                        <td >
+                                        @switch($item->job_type)
+                                        @case(1)
+                                                Quo.
+                                            @break
+                                        @case(2)
+                                                Q&P
+                                            @break
+                                        @case(3)
+                                                Q&S
+                                            @break
+                                        @case(4)
+                                                Q&P&S
+                                            @break
+                                        @case(5)
+                                                 Q&P&S&H
+                                            @break
+                                        @case(6)
+                                             No Quo.
+                                            @break
+                                        @endswitch
+                                        </td>
+
                                         <td>{{$item->quotation}}</td>
                                         <td>{{$item->po}}</td>
                                         <td>{{$item->sr_no}}</td>
@@ -156,13 +181,17 @@
                                                 </button>
                                                 <ul class="dropdown-menu pull-left" role="menu">
                                                     <li>
-                                                        <a href="{{url('admin/fujiservice/create/edit/'.$item->id)}}">
+                                                        <a href="{{url('getcart/'.$item->id)}}">
                                                             <i class="fa fa-file-pdf-o"></i> Edit </a>
 
                                                     </li>
                                                     <li>
                                                         <a href="{{url('admin/fujiservice/delete/'.$item->id)}}">
                                                             <i class="fa fa-file-pdf-o"></i> Delete </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{url('admin/fujiservice/excel/'.$item->id)}}">
+                                                            <i class="fa fa-file-pdf-o"></i> Export Excel </a>
                                                     </li>
                                                     <li>
                                                         
@@ -173,6 +202,10 @@
                                                     <li>
                                                         <a href="{{ url('admin/fujiservice/head-repair-report/'.$item->id) }}">
                                                             <i class="fa fa-file-pdf-o"></i> HR Report</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ url('admin/fujiservice/quotation/'.$item->id) }}">
+                                                            <i class="fa fa-file-pdf-o"></i> Quotation</a>
                                                     </li>
                                                    
                                                   

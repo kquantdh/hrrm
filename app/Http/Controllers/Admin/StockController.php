@@ -152,8 +152,8 @@ class StockController extends Controller
         $in_stock_details=In_stock_detail::select('in_stock_details.*')
             ->join('in_stocks','in_stock_details.in_stock_id','=','in_stocks.id')
             ->join('part_price_lists','in_stock_details.part_id','=','part_price_lists.id')
-            ->where('in_stock_details.is_deleted', 0);
-        $in_stock_details=$in_stock_details->orderBy('part_id', 'DESC')->paginate(5);
+            ->where('in_stock_details.is_deleted', 0)->get();
+
         return view('admin.stock.show_advance',
             ['in_stock_details'=>$in_stock_details,
                 'stt'=>$stt

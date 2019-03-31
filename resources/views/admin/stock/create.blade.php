@@ -118,6 +118,7 @@
                                 <th > Part Number</th>
                                 <th > Part Name </th>
                                 <th > Belong to </th>
+                                <th > Belong to </th>
                                 <th > Number </th>
                                 <th > Location </th>
                                 <th > Detail </th>
@@ -136,15 +137,16 @@
                                         <td> </td> 
                                         <td style="width:13%"> {{$item->id}}</td>
                                         <td >{{$item->name}}</td>
-                                        <td style="width:15%">
+                                        <td  style="width:3%">{{$item->options->belongto}}</td>
+                                        <td style="width:3%">
                                             <input id="input-cart-belongto" type="text" name="belongto" value="{{$item->options->belongto}}" style="width:100%" maxlength="15"/></td>
-                                        <td style="width:13%" > 
+                                        <td style="width:3%" >
                                             <input id="input-cart-number" type="text" name="number" value="{{$item->options->number}}" style="width:100%" maxlength="15"/></td>
-                                        <td style="width:11%" >
+                                        <td style="width:3%" >
                                                 <input id="input-cart-location"type="text" name="location" value="{{$item->options->location}}" style="width:100%" maxlength="15"/></td>
-                                        <td style="width:15%" >
+                                        <td style="width:20%" >
                                             <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%" /></td>
-                                        <td style="width:15%" >
+                                        <td style="width:12%" >
                                             <input type="number" name="qty" value="{{$item->qty}}" style="width:30%" maxlength="2"/>
                                             <input type="submit" value="Update"/></td>
                                         <td style="width:5%"><a href="{{ url('admin/instock/create/deleteinstock/'.$item->id) }}">Delete </a> <br/></td>

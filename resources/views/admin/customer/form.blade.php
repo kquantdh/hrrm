@@ -155,21 +155,82 @@
                                                             </div>
                                                         </div>
                                                         <!--/row-->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="form-group {{ $errors->has('usd_rate') ? 'has-error' : ''}}"></div>
+                                                            <label class="control-label col-md-3">USD rate</label>
+                                                            <div class="col-md-9">
+                                                                {!! Form::text('usd_rate',null,['class'=>'form-control','placeholder'=>'']) !!}
+
+                                                                <span class="help-block"> Typing USD rate. </span>
+                                                                {!! $errors->first('usd_rate','<span style="color:red">:message</span>') !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
                                                         <div class="row">
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
-                                                                            <div class="form-group {{ $errors->has('usd_rate') ? 'has-error' : ''}}"></div>
-                                                                        <label class="control-label col-md-3">USD rate</label>
+                                                                            <div class="form-group {{ $errors->has('normal_hrs') ? 'has-error' : ''}}"></div>
+                                                                        <label class="control-label col-md-3">Normal Hrs</label>
                                                                         <div class="col-md-9">
-                                                                            {!! Form::text('usd_rate',null,['class'=>'form-control','placeholder'=>'']) !!}
+                                                                            {!! Form::text('normal_hrs',null,['class'=>'form-control','placeholder'=>'']) !!}
             
-                                                                            <span class="help-block"> Typing USD rate. </span>
-                                                                            {!! $errors->first('usd_rate','<span style="color:red">:message</span>') !!}
+                                                                            <span class="help-block"> Typing service charge for normal hours. </span>
+                                                                            {!! $errors->first('normal_hrs','<span style="color:red">:message</span>') !!}
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <!--/row-->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="form-group {{ $errors->has('night_hrs') ? 'has-error' : ''}}"></div>
+                                                            <label class="control-label col-md-3">Night Hrs</label>
+                                                            <div class="col-md-9">
+                                                                {!! Form::text('night_hrs',null,['class'=>'form-control','placeholder'=>'']) !!}
+
+                                                                <span class="help-block"> Typing service charge for night hours. </span>
+                                                                {!! $errors->first('night_hrs','<span style="color:red">:message</span>') !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="form-group {{ $errors->has('off_hrs') ? 'has-error' : ''}}"></div>
+                                                            <label class="control-label col-md-3">Offday Hrs</label>
+                                                            <div class="col-md-9">
+                                                                {!! Form::text('off_hrs',null,['class'=>'form-control','placeholder'=>'']) !!}
+
+                                                                <span class="help-block"> Typing service charge for offday hours. </span>
+                                                                {!! $errors->first('off_hrs','<span style="color:red">:message</span>') !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="form-group {{ $errors->has('holiday_hrs') ? 'has-error' : ''}}"></div>
+                                                            <label class="control-label col-md-3">Holiday Hrs</label>
+                                                            <div class="col-md-9">
+                                                                {!! Form::text('holiday_hrs',null,['class'=>'form-control','placeholder'=>'']) !!}
+
+                                                                <span class="help-block"> Typing service charge for holiday hours. </span>
+                                                                {!! $errors->first('holiday_hrs','<span style="color:red">:message</span>') !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+
 
 
                                             </div>

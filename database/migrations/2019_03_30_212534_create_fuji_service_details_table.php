@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateFujiServiceDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,16 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('fuji_service_details', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('fuji_service_id');
+            $table->string('part_id');
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
+            $table->float('price');
+            $table->integer('quantity');
+            $table->string('vn_name')->nullable($value=true);
+            $table->string('location')->nullable($value=true);
+
             $table->timestamps();
         });
     }
@@ -30,6 +34,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('fuji_service_details');
     }
 }
