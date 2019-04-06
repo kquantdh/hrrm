@@ -202,9 +202,81 @@ class FujiServiceController extends Controller
                 $ord->part_amount = $amount;
                 $ord->save();
 
-            Cart::destroy();
+            Cart::instance('createFujiService')->destroy();
             Session::flash('success', 'Add new successfull!');
             return redirect('/admin/fujiservice');
+
+    }
+    public function storeCopy(Request $request)
+    {
+        $this->validate($request, [
+            'entry' => 'integer',
+            'discount' => 'integer',
+            'discount_part' => 'integer',
+            'normal_hrs' => 'numeric',
+            'night_hrs' => 'numeric',
+            'off_hrs' => 'numeric',
+            'normal_hrs' => 'numeric',
+            'holiday_hrs' => 'numeric',
+            'person_amount' => 'integer',
+        ],
+            [
+                'required' => ':Attribute  is not blank',
+                'integer' => ':Attribute must be integer number',
+                'numeric' => ':Attribute must be numeric',
+            ],
+
+            [
+
+            ]);
+
+        $ord = new Fuji_service();
+        $ord->customer_id = $request->customer_id;
+        $ord->job_type = $request->job_type;
+        $ord->quotation = $request->quotation;
+        $ord->po = $request->po;
+        $ord->sr_no = $request->sr_no;
+        $ord->invoice = $request->invoice;
+        $ord->head_type_id = $request->head_type_id;
+        $ord->head_serial = $request->head_serial;
+        $ord->nature_service = $request->nature_service;
+        $ord->status = $request->status;
+        $ord->entry = $request->entry;
+        $ord->discount = $request->discount;
+        $ord->discount_part = $request->discount_part;
+        $ord->normal_hrs = $request->normal_hrs;
+        $ord->night_hrs = $request->night_hrs;
+        $ord->off_hrs = $request->off_hrs;
+        $ord->holiday_hrs = $request->holiday_hrs;
+        $ord->person_amount = $request->person_amount;
+        $ord->problem =$request->problem;
+        $ord->countermeasure = $request->countermeasure;
+        $ord->save();
+        $temp=Customer::where('id', $request->customer_id)->first();
+        $chargeTransport=($request->entry*$temp->transport_price);
+        $chargeNormal=($request->person_amount*(1-($request->discount/100))*($temp->normal_hrs*$request->normal_hrs));
+        $chargeNight=($request->person_amount*(1-($request->discount/100))*($temp->night_hrs*$request->night_hrs));
+        $chargeOff=($request->person_amount*(1-($request->discount/100))*($temp->off_hrs*$request->off_hrs));
+        $chargeHoliday=($request->person_amount*(1-($request->discount/100))*($temp->holiday_hrs*$request->holiday_hrs));
+        $ord->service_amount = $chargeTransport+$chargeNormal+$chargeOff+$chargeNight+$chargeHoliday;
+        $ord->save();
+        $amount = 0;
+        foreach (Cart::instance('editFujiServiceCopy')->content() as $sp) {
+            $ordDetail = new Fuji_service_detail();
+            $ordDetail->fuji_service_id = $ord->id;
+            $ordDetail->part_id = $sp->id;
+            $ordDetail->name = $sp->name;
+            $ordDetail->price = $sp->price;
+            $ordDetail->quantity = $sp->qty;
+            $ordDetail->save();
+            $amount += ($sp->price * $sp->qty);
+        }
+        $ord->part_amount = $amount;
+        $ord->save();
+
+        Cart::instance('editFujiServiceCopy')->destroy();
+        Session::flash('success', 'Add new successfull!');
+        return redirect('/admin/fujiservice');
 
     }
 

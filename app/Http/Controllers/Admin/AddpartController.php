@@ -73,18 +73,45 @@ class AddpartController extends Controller
         }
         return redirect()->back();
     }
+    public function editMuaHangCopy($id)
+    {
+        $array_tmp=array();
+        $buy = Part_price_list::where('id', $id)->first();
+        foreach(Cart::instance('editFujiServiceCopy')->content() as $item){
+            array_push($array_tmp,$item->id);
+        }
+        $temp=$buy->id;
+        if(in_array( $temp,$array_tmp,true)) {
+            Session::flash('fail', 'You clicked over 1 time for one part. Please choose other part!');
+        }else {
+            cart::instance('editFujiServiceCopy')->add(array('id' => $buy->id, 'name' => $buy->name, 'qty' => 1, 'price' => $buy->price,
+                'options' => array('rep_new'=>$buy->rep_new)));
+        }
+        return redirect()->back();
+    }
 
 
     public function getCart($id)
-    {
-        Cart::instance('editFujiService')->destroy();
-        $fuji_service = Fuji_service::where('id', $id)->first();  
-        $list = Fuji_service_detail::where('fuji_service_id', $id)->get();
-        foreach ($list as $buy){
+{
+    Cart::instance('editFujiService')->destroy();
+    $fuji_service = Fuji_service::where('id', $id)->first();
+    $list = Fuji_service_detail::where('fuji_service_id', $id)->get();
+    foreach ($list as $buy){
         cart::instance('editFujiService')->add(array('id' => $buy->part_id, 'name' => $buy->name, 'qty' => $buy->quantity, 'price' => $buy->price-($buy->discount*$buy->price)/100,
             'options' => array('rep_new'=>$buy->part_price_list->rep_new)));
+    }
+    return redirect('admin/fujiservice/create/edit/'.$id);
+}
+    public function getCartCopy($id)
+    {
+        Cart::instance('editFujiServiceCopy')->destroy();
+        $fuji_service = Fuji_service::where('id', $id)->first();
+        $list = Fuji_service_detail::where('fuji_service_id', $id)->get();
+        foreach ($list as $buy){
+            cart::instance('editFujiServiceCopy')->add(array('id' => $buy->part_id, 'name' => $buy->name, 'qty' => $buy->quantity, 'price' => $buy->price-($buy->discount*$buy->price)/100,
+                'options' => array('rep_new'=>$buy->part_price_list->rep_new)));
         }
-        return redirect('admin/fujiservice/create/edit/'.$id);
+        return redirect('admin/fujiservice/create/edit-copy/'.$id);
     }
 
     public function deleteorder($id)
@@ -101,9 +128,9 @@ class AddpartController extends Controller
         return redirect('admin/fujiservice/create');
     }
 
-    public function deleteorderEdit($id)
+    public function deleteorderEditCopy($id)
     {
-        $content = Cart::instance('editFujiService')->content();
+        $content = Cart::instance('editFujiServiceCopy')->content();
         foreach ($content as $item) {
             if ($id == $item->id) {
                 $rowId = $item->rowId;
@@ -154,6 +181,20 @@ class AddpartController extends Controller
             }
         return redirect()->back();
     }
+    public function updateEditCartCopy(Request $request, $id)
+    {
+        //lấy về số lượng còn lại trong kho của sản phẩm này
+
+        $content = Cart::instance('editFujiServiceCopy')->content();
+        foreach ($content as $item) {
+            if ($id == $item->id) {
+                $rowId = $item->rowId;
+                Cart::instance('editFujiServiceCopy')->update($rowId, ['qty' => $request->qty]);
+                break;
+            }
+        }
+        return redirect()->back();
+    }
 
     public function edit(Request $request,$id)
     {
@@ -169,6 +210,26 @@ class AddpartController extends Controller
         
 
         return view('admin.fuji_service.edit',[
+                'head_types'=>$this->_cates,
+                'part_price_lists'=>$part_price_lists,
+                'fuji_service' => $fuji_service,
+                'customers'=>$this->_cust ]
+        );
+    }
+    public function editCopy(Request $request,$id)
+    {
+        $part_price_lists=Part_price_list::select('part_price_lists.*')
+            ->where('part_price_lists.id','like','%'.$request->keyword.'%')
+            ->orwhere('part_price_lists.name','like','%'.$request->keyword.'%')
+            ->orwhere('part_price_lists.rep_new','like','%'.$request->keyword.'%')
+            ->orwhere('part_price_lists.description','like','%'.$request->keyword.'%');
+        $part_price_lists=$part_price_lists->orderBy('id', 'DESC')->paginate(10);
+        $fuji_service = Fuji_service::where('id', $id)->first();
+        $fuji_service->is_viewed=1;
+        $fuji_service->save();
+
+
+        return view('admin.fuji_service.edit_copy',[
                 'head_types'=>$this->_cates,
                 'part_price_lists'=>$part_price_lists,
                 'fuji_service' => $fuji_service,
@@ -278,7 +339,7 @@ class AddpartController extends Controller
                 
             }
          }
-        Cart::destroy();
+        Cart::instance('editFujiService')->destroy();
         
         Session::flash('success', 'Edit successfull!');
     

@@ -186,12 +186,13 @@
 
                                                     </li>
                                                     <li>
-                                                        <a href="{{url('admin/fujiservice/delete/'.$item->id)}}">
-                                                            <i class="fa fa-file-pdf-o"></i> Delete </a>
+                                                        <a href="{{url('getcart-copy/'.$item->id)}}">
+                                                            <i class="fa fa-file-pdf-o"></i> Copy </a>
+
                                                     </li>
                                                     <li>
-                                                        <a href="{{url('admin/fujiservice/excel/'.$item->id)}}">
-                                                            <i class="fa fa-file-pdf-o"></i> Export Excel </a>
+                                                        <a href="{{url('admin/fujiservice/delete/'.$item->id)}}">
+                                                            <i class="fa fa-file-pdf-o"></i> Delete </a>
                                                     </li>
                                                     <li>
                                                         
@@ -204,7 +205,7 @@
                                                             <i class="fa fa-file-pdf-o"></i> HR Report</a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{ url('admin/fujiservice/quotation/'.$item->id) }}">
+                                                        <a href="{{url('admin/fujiservice/excel/'.$item->id)}}">
                                                             <i class="fa fa-file-pdf-o"></i> Quotation</a>
                                                     </li>
                                                    

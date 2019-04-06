@@ -60,15 +60,21 @@ Route::group(['middleware'=>['ckAdmin']],function (){
 
     Route::get('muahang/{id}', 'Admin\AddpartController@muahang');
     Route::get('edit_muahang/{id}', 'Admin\AddpartController@editMuaHang');
+    Route::get('edit_muahang_copy/{id}', 'Admin\AddpartController@editMuaHangCopy');
     Route::get('getcart/{id}', 'Admin\AddpartController@getCart');
+    Route::get('getcart-copy/{id}', 'Admin\AddpartController@getCartCopy');
     Route::get('admin/fujiservice/reset_cart','Admin\AddpartController@resetCart');
     Route::get('admin/fujiservice/create/delete/{id}', 'Admin\AddpartController@deleteorder');
     Route::post('admin/fujiservice/create/update-cart/{id}', 'Admin\AddpartController@updateCart');
     Route::get('admin/fujiservice/create/edit/{id}','Admin\AddpartController@edit');
+    Route::get('admin/fujiservice/create/edit-copy/{id}','Admin\AddpartController@editCopy');
     Route::post('admin/fujiservice/create/edit/update-edit-cart/{id}', 'Admin\AddpartController@updateEditCart');
+    Route::post('admin/fujiservice/create/edit/update-edit-cart-copy/{id}', 'Admin\AddpartController@updateEditCartCopy');
     Route::get('admin/fujiservice/create/edit/delete/{id}', 'Admin\AddpartController@deleteorderEdit');
+    Route::get('admin/fujiservice/create/edit/delete-copy/{id}', 'Admin\AddpartController@deleteorderEditCopy');
     Route::get('admin/fujiservice/create/edit/delete_all_edit/{id}', 'Admin\AddpartController@deleteAllEdit');
     Route::patch('admin/fujiservice/create/edit/{id}', 'Admin\AddpartController@update');
+    Route::put('admin/fujiservice/create/edit-copy/{id}', 'Admin\FujiServiceController@storeCopy');
 
 
     Route::get('admin/fujiservice','Admin\FujiServiceController@index');
