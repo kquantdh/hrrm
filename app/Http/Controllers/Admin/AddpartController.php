@@ -315,14 +315,18 @@ class AddpartController extends Controller
             $list1 = Fuji_service_detail::where('fuji_service_id', $id)->get();
         foreach ($list1 as $data){
             array_push($array_tmp,$data->part_id);
-        } 
+        }
+            $amount=0;
           foreach (Cart::instance('editFujiService')->content() as $sp)
             {
                 $value_data = $sp->id;
+                $amount += ($sp->price * $sp->qty);
+
                 if(in_array($value_data,$array_tmp,true)){ 
                     if(($data1->part_id)==($sp->id)){
                    $data1->price = $sp->price;
                     $data1->quantity = $sp->qty;
+
                     $data1->update();    
                    }        
                 }else{
@@ -332,9 +336,11 @@ class AddpartController extends Controller
                     $list->name = $sp->name;
                     $list->quantity = $sp->qty;
                     $list->price = $sp->price;
+                    $amount += ($sp->price * $sp->qty);
                    $list->save();
                 }
-                $fuji_service->part_amount = Cart::instance('editFujiService')->subtotal(0, ".", ",");
+                $fuji_service->part_amount = $amount;
+
                 $fuji_service->save();
                 
             }
@@ -345,7 +351,5 @@ class AddpartController extends Controller
     
         return redirect('/admin/fujiservice');
         }
-             
-    
 }
 }

@@ -146,16 +146,19 @@
                                         <td >{{$item->name}}</td>
                                          <td  style="width:3%">{{$item->options->belongto}}</td>
                                         <td style="width:3%">
-                                                <input type="text" name="belongto" value="{{$item->options->belongto}}" style="width:100%" maxlength="15"/></td>
+                                                <input type="text" name="belongto" value="{{$item->options->belongto}}" style="width:100%"/></td>
                                             <td style="width:3%" >
-                                                <input type="text" name="number" value="{{$item->options->number}}" style="width:100%" maxlength="15"/></td>
+                                                <input type="text" name="number" value="{{$item->options->number}}" style="width:100%" /></td>
                                             <td style="width:3%" >
-                                                    <input type="text" name="location" value="{{$item->options->location}}" style="width:100%" maxlength="15"/></td>
+                                                    <input type="text" name="location" value="{{$item->options->location}}" style="width:100%" /></td>
                                             <td style="width:20%" >
-                                                <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%" maxlength="15"/></td>
+                                                <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%"/></td>
                                             <td style="width:12%" >
-                                                    <input type="number" name="qty" value="{{$item->qty}}" width="5" style="width:30%" maxlength="2"/>
-                                                    <input type="submit" value="Update"/></td>
+                                                    <input type="number" name="qty" value="{{$item->qty}}"  style="width:100%" />
+                                            </td>
+                                            <td style="width:12%" >
+                                                    <input type="submit" value="Update" style="width:100%"/>
+                                            </td>
                                             @if(Cart::instance('editInstock')->content()->count()>1)
                                              <td><a href="{{ url('admin/instock/create/edit/delete/'.$item->id) }}">Delete </a> <br/></td>
                                             @else

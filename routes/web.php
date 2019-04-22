@@ -84,9 +84,9 @@ Route::group(['middleware'=>['ckAdmin']],function (){
     Route::get('admin/fujiservice/report/{id}','Admin\FujiServiceController@serviceReportPDF');
     Route::get('admin/fujiservice/service-report/{id}','Admin\FujiServiceController@serviceReport');
     Route::get('admin/fujiservice/head-repair-report/{id}','Admin\FujiServiceController@headRepairReport');
-    Route::get('admin/fujiservice/quotation/{id}','Admin\FujiServiceController@quotation');
-    Route::get('admin/report','Admin\FujiServiceController@report');
-    Route::get('admin/fujiservice/excel/{id}','Admin\FujiServiceController@report');
+    Route::get('admin/fujiservice/view-quotation/{id}','Admin\FujiServiceController@viewQuotation');
+    Route::get('admin/fujiservice/excel-quotation/{id}','Admin\FujiServiceController@excelQuotation');
+    Route::get('admin/fujiservice/pdf-quotation/{id}','Admin\FujiServiceController@pdfQuotation');
     
     
     Route::resource('admin/headtype','Admin\HeadTypeController');

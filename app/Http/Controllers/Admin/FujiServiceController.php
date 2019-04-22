@@ -65,18 +65,29 @@ class FujiServiceController extends Controller
             'list' => $list]);
     }
 
-    public function quotation($id)
+    public function viewQuotation($id)
     {
         $fuji_service = Fuji_service::where('id', $id)->first();
         $fuji_service->save();
         $list = Fuji_service_detail::where('fuji_service_id', $id)->get();
-        return view('admin.fuji_service.quotation',
-            ['fuji_service'=>$fuji_service,
-                'list' => $list]);
+        return view('admin.fuji_service.view_quotation',
+            ['fuji_services'=>$fuji_service,
+                'fuji_service_details' => $list]);
     }
-    public function report($id)
+    public function excelQuotation($id)
     {
         return Excel::download(new HistoryExport($id), 'quotation.xlsx');
+
+    }
+    public function pdfQuotation($id)
+    {
+        $fuji_service = Fuji_service::where('id', $id)->first();
+        $fuji_service->save();
+        $list = Fuji_service_detail::where('fuji_service_id', $id)->get();
+        $pdf=PDF::loadView('admin.fuji_service.pdf_quotation',
+            ['fuji_services'=>$fuji_service,
+                'fuji_service_details' => $list]);
+        return $pdf->download('pdfQuotation.pdf');
 
     }
 
@@ -341,10 +352,7 @@ class FujiServiceController extends Controller
         
         return redirect('admin/fujiservice');
     }
-    public function historyExport() 
-    {
-    return Excel::download(new HistoryExport, 'invoices.xlsx');
-    }
+
     public function serviceReportPDF ($id) 
     {
         $fuji_service = Fuji_service::where('id', $id)->first();

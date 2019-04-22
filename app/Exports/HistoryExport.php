@@ -19,7 +19,7 @@ class HistoryExport implements FromView
     }
     public function view():View
     {
-        return view('admin.fuji_service.report', [
+        return view('admin.fuji_service.excel_quotation', [
             'fuji_services' => Fuji_service::where('id',$this->id)->get(),
             'fuji_service_details'=>Fuji_service_detail::where('fuji_service_id',$this->id)->get()
         ]);

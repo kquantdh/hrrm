@@ -72,7 +72,7 @@
                                         <th>
                                            
                                         </th>
-                                        <th> HRR No </th>
+                                        <th> Job No </th>
                                         <th> Cust. </th>
                                         <th> Type </th>
                                         <th> Quotion</th>
@@ -106,13 +106,15 @@
                                     </tfoot>
                                     <tbody>
 
+
                                     @if(isset($fuji_services))
                                         @foreach($fuji_services as $item)
                                     <tr class="odd gradeX">
                                         <td>
                                             
                                         </td>
-                                        <td> HRR18{{$item->id}} </td>
+                                        <td>J{{date('Y-m-d')[2]}}{{date('Y-m-d')[3]}}{{str_pad($item->id, 4, '0',STR_PAD_LEFT)}}
+                                            </td>
                                         <td class="center"> {{$item->customer->name}}  </td>
                                         <td >
                                         @switch($item->job_type)
@@ -205,9 +207,10 @@
                                                             <i class="fa fa-file-pdf-o"></i> HR Report</a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{url('admin/fujiservice/excel/'.$item->id)}}">
+                                                        <a href="{{url('admin/fujiservice/view-quotation/'.$item->id)}}">
                                                             <i class="fa fa-file-pdf-o"></i> Quotation</a>
                                                     </li>
+
                                                    
                                                   
                                                 </ul>

@@ -3,8 +3,6 @@
 @section('level1') Edit @endsection
 @section('formName') Edit head history @endsection
 @section('content')
-   
-           
 
             <div class="row">
                 <div class="col-md-12">
@@ -55,7 +53,7 @@
                                                 </div>
 
                                             <div class="col-md-6">
-                                                {!! Form::open(['method'=>'GET','url'=>'admin/fujiservice/create']) !!}
+                                                {!! Form::open(['method'=>'GET','url'=>'admin/fujiservice/create/edit/'.$fuji_service->id]) !!}
                                                 {!!Form::label('sample_file','Typing :',['class'=>'col-md-3'])!!}
 
                                                 {!! Form::text('keyword',null,["id"=>"input-text1"]) !!}
