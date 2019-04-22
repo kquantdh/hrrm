@@ -143,7 +143,7 @@
                                            {!! Form::open(['method' => 'POST','url' => [ 'admin/instock/create/edit/update-edit-instock', $item->id]]) !!}
                                         <td ></td>
                                         <td style="width:13%"> {{$item->id}}</td>
-                                        <td >{{$item->name}}</td>
+                                        <td style="width:15%">{{$item->name}}</td>
                                          <td  style="width:3%">{{$item->options->belongto}}</td>
                                         <td style="width:3%">
                                                 <input type="text" name="belongto" value="{{$item->options->belongto}}" style="width:100%"/></td>
@@ -153,10 +153,10 @@
                                                     <input type="text" name="location" value="{{$item->options->location}}" style="width:100%" /></td>
                                             <td style="width:20%" >
                                                 <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%"/></td>
-                                            <td style="width:12%" >
+                                            <td style="width:10%" >
                                                     <input type="number" name="qty" value="{{$item->qty}}"  style="width:100%" />
                                             </td>
-                                            <td style="width:12%" >
+                                            <td style="width:10%" >
                                                     <input type="submit" value="Update" style="width:100%"/>
                                             </td>
                                             @if(Cart::instance('editInstock')->content()->count()>1)
