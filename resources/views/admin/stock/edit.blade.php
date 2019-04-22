@@ -126,13 +126,14 @@
                                         <th ></th>
                                         <th > Part Number</th>
                                         <th > Part Name </th>
-                                        <th > Belong to </th>
-                                        <th > Belong to </th>
-                                        <th > Number </th>
-                                        <th > Location </th>
+                                        <th > Ref</th>
+                                        <th > Belong</th>
+                                        <th > No </th>
+                                        <th > Loc. </th>
                                         <th > Detail </th>
                                         <th > Q'ty </th>
-                                        <th > Action </th>
+                                        <th > Up </th>
+                                        <th > Act. </th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -141,28 +142,28 @@
                                       @foreach(Cart::instance('editInstock')->content() as $item)
                                         <tr class="odd gradeX">
                                            {!! Form::open(['method' => 'POST','url' => [ 'admin/instock/create/edit/update-edit-instock', $item->id]]) !!}
-                                        <td ></td>
+                                        <td style="width:2%" ></td>
                                         <td style="width:13%"> {{$item->id}}</td>
-                                        <td style="width:15%">{{$item->name}}</td>
+                                        <td style="width:24%">{{$item->name}}</td>
                                          <td  style="width:3%">{{$item->options->belongto}}</td>
-                                        <td style="width:3%">
-                                                <input type="text" name="belongto" value="{{$item->options->belongto}}" style="width:100%"/></td>
-                                            <td style="width:3%" >
+                                        <td style="width:5%">
+                                                <input type="text" name="belongto" value="{{$item->options->belongto}}" style="width:80%"/></td>
+                                            <td style="width:5%" >
                                                 <input type="text" name="number" value="{{$item->options->number}}" style="width:100%" /></td>
-                                            <td style="width:3%" >
+                                            <td style="width:5%" >
                                                     <input type="text" name="location" value="{{$item->options->location}}" style="width:100%" /></td>
                                             <td style="width:20%" >
                                                 <input type="text" name="detail" value="{{$item->options->detail}}" style="width:100%"/></td>
-                                            <td style="width:10%" >
-                                                    <input type="number" name="qty" value="{{$item->qty}}"  style="width:100%" />
+                                            <td style="width:5%" >
+                                                    <input type="number" name="qty" value="{{$item->qty}}"  style="width:80%" />
                                             </td>
-                                            <td style="width:10%" >
+                                            <td style="width:7%" >
                                                     <input type="submit" value="Update" style="width:100%"/>
-                                            </td>
+                                            </td >
                                             @if(Cart::instance('editInstock')->content()->count()>1)
-                                             <td><a href="{{ url('admin/instock/create/edit/delete/'.$item->id) }}">Delete </a> <br/></td>
+                                             <td style="width:7%"><a href="{{ url('admin/instock/create/edit/delete/'.$item->id) }}">Delete </a> <br/></td>
                                             @else
-                                                <td><button onclick="return confirm('You can\'t delete this, must add  one more part before delete it')">Delete </button> <br/></td>
+                                                <td style="width:7%"><button onclick="return confirm('You can\'t delete this, must add  one more part before delete it')">Delete </button> <br/></td>
                                             @endif
                                          {!! Form::close() !!}
                                       </tr>
