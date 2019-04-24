@@ -94,7 +94,7 @@ class FujiServiceController extends Controller
 
 
     public function create(Request $request)
-    {   
+    {
         $limit = 5;
         $page = $request->get('page',1);
         $stt = ((int)$page-1)*$limit;

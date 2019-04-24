@@ -79,7 +79,9 @@ class StockController extends Controller
         $page = $request->get('page',1);
         $stt = ((int)$page-1)*$limit;
 
-        $in_stock_details=In_stock_detail::select('in_stock_details.*')
+        $in_stock_details=In_stock_detail::select('in_stock_details.in_stock_id','in_stock_details.barcode','in_stock_details.part_id','in_stock_details.id',
+            'in_stock_details.belongto','in_stock_details.quantity','in_stock_details.balance','in_stock_details.location','in_stock_details.thumbnail','in_stock_details.detail','in_stock_details.is_deleted'
+        )
                          ->join('in_stocks','in_stock_details.in_stock_id','=','in_stocks.id')
                          ->join('part_price_lists','in_stock_details.part_id','=','part_price_lists.id')
                          ->where('in_stock_details.is_deleted', 0);
