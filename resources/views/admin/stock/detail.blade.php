@@ -17,7 +17,7 @@
                 <th> Part No</th>
                 <th > Part Name</th>
                 <th > Barcode </th>
-                <th > Out Qty </th>
+                <th > Qty </th>
                 <th > Belong to </th>
                 <th > Location </th>
             </tr>

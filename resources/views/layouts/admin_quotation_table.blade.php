@@ -29,9 +29,11 @@ License: You must have a valid license purchased only from themeforest(the above
     <style>
         table, th, td {
             font-family: Arial;font-family: Arial;
-            font-size: 15px;
+            font-size: 10px;
             border: none;
             border-collapse: collapse;
+            margin: 0px;
+            padding: 0;
         }
 
         th {
