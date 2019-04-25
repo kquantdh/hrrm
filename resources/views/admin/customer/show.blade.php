@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1_2">
+                                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1_8">
                                     <thead>
                                     <tr>
                                         <th>No</th>
@@ -76,6 +76,23 @@
 
                                     </tr>
                                     </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+                                        <th> </th>
+
+
+
+                                    </tr>
+                                    </tfoot>
 
                                     <tbody>
 

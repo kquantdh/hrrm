@@ -258,29 +258,9 @@ class AddpartController extends Controller
             [
 
             ]);
-        $fuji_service = Fuji_service::findOrFail($id); 
-        $fuji_service->customer_id = $request->customer_id;
-        $fuji_service->quotation = $request->quotation;
-        $fuji_service->po = $request->po;
-        $fuji_service->sr_no = $request->sr_no;
-        $fuji_service->invoice = $request->invoice;
-        $fuji_service->head_type_id = $request->head_type_id;
-        $fuji_service->head_serial = $request->head_serial;
-        $fuji_service->nature_service = $request->nature_service;
-        $fuji_service->status = $request->status;
-        $fuji_service->entry = $request->entry;
-        $fuji_service->discount = $request->discount;
-        $fuji_service->discount_part = $request->discount_part;
-        $fuji_service->normal_hrs = $request->normal_hrs;
-        $fuji_service->night_hrs = $request->night_hrs;
-        $fuji_service->off_hrs = $request->off_hrs;
-        $fuji_service->holiday_hrs = $request->holiday_hrs;
-        $fuji_service->person_amount = $request->person_amount;
-        $fuji_service->problem=$request->problem;
-        $fuji_service->countermeasure=$request->countermeasure;               
-        $fuji_service->save();
+        $fuji_service = Fuji_service::findOrFail($id);
+        $fuji_service->update($request->all());
         $temp=Customer::where('id', $request->customer_id)->first();
-
         $chargeTransport=($request->entry*$temp->transport_price);
         $chargeNormal=($request->person_amount*(1-($request->discount/100))*($temp->normal_hrs*$request->normal_hrs));
         $chargeNight=($request->person_amount*(1-($request->discount/100))*($temp->night_hrs*$request->night_hrs));

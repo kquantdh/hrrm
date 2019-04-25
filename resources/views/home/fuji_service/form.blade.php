@@ -13,6 +13,29 @@
                                                                 <span class="caption-subject bold uppercase"> Basic Info</span>
                                                             </div>
                                                         </div>
+                                                        <!--/row-->
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Customer
+                                                                        <span class="required" aria-required="true"> * </span></label>
+                                                                    <div class="col-md-9">
+                                                                        {!! Form::select('customer_id',$customers,null,["class"=>"form-control"]) !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Quotation</label>
+                                                                    <div class="col-md-9">
+                                                                        {!! Form::text('quotation',null,['class'=>'form-control','placeholder'=>'']) !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                        </div>
+                                                        <!--/row-->
                                                 
                                                 <div class="row">
                                                      <div class="col-md-6">

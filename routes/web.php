@@ -79,7 +79,8 @@ Route::group(['middleware'=>['ckAdmin']],function (){
 
     Route::get('admin/fujiservice','Admin\FujiServiceController@index');
     Route::get('admin/fujiservice/create','Admin\FujiServiceController@create');
-    Route::post('admin/fujiservice/create', 'Admin\FujiServiceController@store'); 
+    Route::get('admin/fujiservice/create_more_service','Admin\FujiServiceController@createMoreService');
+    Route::post('admin/fujiservice/create_more_service', 'Admin\FujiServiceController@storeMoreService');
     Route::get('admin/fujiservice/delete/{id}','Admin\FujiServiceController@delete');
     Route::get('admin/fujiservice/report/{id}','Admin\FujiServiceController@serviceReportPDF');
     Route::get('admin/fujiservice/service-report/{id}','Admin\FujiServiceController@serviceReport');

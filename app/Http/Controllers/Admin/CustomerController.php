@@ -19,9 +19,9 @@ class CustomerController extends Controller
         $limit = 5;
         $page = $request->get('page',1);
         $stt = ((int)$page-1)*$limit;
-        $customers=Customer::select('customers.*');
+        $customers=Customer::select('customers.*')->get();
 
-        $customers=$customers->orderBy('name', 'DESC')->paginate(5);
+
         return view('admin.customer.show',
                    ['customers'=>$customers,
                     'stt'=>$stt

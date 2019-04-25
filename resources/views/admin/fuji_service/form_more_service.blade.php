@@ -362,7 +362,7 @@
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="submit" class="btn green">Submit</button>
                                 <div class="btn-group">
-                                <a href="{{ url('admin/fujiservice/reset_cart') }}" id="sample_editable_1_2_new" class="btn sbold yellow">More
+                                <a href="{{ url('admin/fujiservice/create_more_service') }}" id="sample_editable_1_2_new" class="btn sbold yellow">More
                                 </a>
                             </div>
                                 <button type="button" class="btn default">Cancel</button>
