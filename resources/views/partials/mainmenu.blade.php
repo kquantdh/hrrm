@@ -6,6 +6,13 @@
         <!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
         <div class="hor-menu  ">
             <ul class="nav navbar-nav">
+                <li aria-haspopup="true" class="menu-dropdown mega-menu-dropdown  ">
+                    <img src="{{asset('img/FUJI-LOGO.png')}}" alt="logo" class="logo-default"  height="50px"   >
+                        <span class="arrow"></span>
+                    </a>
+
+                </li>
+
                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
                     <a href="javascript:;"> Dashboard
                         <span class="arrow"></span>
@@ -44,26 +51,30 @@
 
                     </ul>
                 </li>
+
+
                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
                     <a href="javascript:;"> Inventory
                         <span class="arrow"></span>
                     </a>
                     <ul class="dropdown-menu pull-left">
                         <li aria-haspopup="true" class=" ">
-                            <a href="{{ url('admin/stock_advance') }}" class="nav-link  ">Stock Advance</a>
+                            <a href="{{ url('admin/stock_advance') }}" class="nav-link  ">Stock</a>
                         </li>
-                            <li aria-haspopup="true" class=" ">
-                                    <a href="{{ url('admin/stock') }}" class="nav-link  ">Stock </a>
-                                </li>
+
                         <li aria-haspopup="true" class=" ">
                             <a href="{{ url('admin/instock') }}" class="nav-link  ">Instock </a>
                         </li>
+                        @if($isAdmin)
                         <li aria-haspopup="true" class=" ">
                             <a href="{{ url('admin/outstock') }}" class="nav-link ">Out & Return stock</a>
                         </li>
+                         @endif
                                                
                     </ul>
                 </li>
+                @if (!Auth::user())
+                @elseif(Auth::user()->group_id==1))
                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
                     <a href="javascript:;"> Database
                         <span class="arrow"></span>
@@ -84,6 +95,43 @@
 
                     </ul>
                 </li>
+                @endif
+                <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
+                    <a href="javascript:;"> My account
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="dropdown-menu pull-left">
+                        @if (!Auth::user())
+                            <li><a href="{{url('/register')}}"> <i class="icon-user"></i> Sign up</a></li>
+                            <li><a href="{{url('/login')}}"><i class="icon-envelope-open"></i>Sign in</a></li>
+
+                        @else
+                            @if (Auth::user()->group_id==1)
+                                <li><a href="{{url('/admin/fujiservice')}}"><i class="icon-user"></i> Admin : {{Auth::user()->name}}</a></li>
+
+                            @else
+                                <li><a href="{{url('/')}}"><i class="icon-user"></i> User : {{Auth::user()->name}}</a></li>
+                            @endif
+                                <li>
+
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                               document.getElementById('logout-form').submit();"><i class="icon-key"></i>
+                                        Logout
+                                    </a>
+                                {!! Form::open(['method' => 'POST', 'url' => 'logout','id'=>'logout-form']) !!}
+
+
+
+                                {{ csrf_field() }}
+                                {!! Form::close() !!}
+                        @endif
+
+
+
+
+                    </ul>
+                </li>
+
                
             </ul>
         </div>

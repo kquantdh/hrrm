@@ -161,7 +161,7 @@
                                                     <input type="submit" value="Update" style="width:100%"/>
                                             </td >
                                             @if(Cart::instance('editInstock')->content()->count()>1)
-                                             <td style="width:7%"><a href="{{ url('admin/instock/create/edit/delete/'.$item->id) }}">Delete </a> <br/></td>
+                                             <td style="width:7%"><a onclick="return confirm('Are you sure to delete this part ?')" href="{{ url('admin/instock/create/edit/delete/'.$item->id) }}">Delete </a> <br/></td>
                                             @else
                                                 <td style="width:7%"><button onclick="return confirm('You can\'t delete this, must add  one more part before delete it')">Delete </button> <br/></td>
                                             @endif

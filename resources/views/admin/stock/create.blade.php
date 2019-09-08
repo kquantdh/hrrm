@@ -41,9 +41,9 @@
                                         <!--end  Welcome -->
                                     </div>
                                      @endif
-                                    
+
                                     <div class="row">
-                                            <div class="col-md-6">    
+                                            <div class="col-md-6">
                                                     {!! Form::open(['method'=>'GET','url'=>'admin/instock/create']) !!}
                                                     {!!Form::label('sample_file','Typing :',['class'=>'col-md-3'])!!}
                                                     {!! Form::text('keyword',null,["id"=>"input-text1"]) !!}
@@ -69,7 +69,7 @@
                                 <th class="numeric"> Action </th>
                             </tr>
                             </thead>
-                           
+
                             <tbody>
                             @if(isset($part_price_lists))
                                 @foreach($part_price_lists as $k=>$item)
@@ -83,13 +83,14 @@
                                         <td class="center"> {{$item->price}} </td>
                                         <td class="center"> {{$item->detail}} </td>
                                         <td class="center"> {{$item->vn_name}}</td>
-                                        
+
                                         <td><a title="Add to Cart" href="{!! url('instock',[$item->id]) !!}"><i class="fa fa-plus"></i> Add</a></td>
                                     </tr>
                                 @endforeach
                             @endif
                             </tbody>
                         </table>
+
                         @if($part_price_lists->links())
                                         {!! $part_price_lists->links() !!}
                                     @endif
@@ -129,7 +130,7 @@
                             </thead>
                             <tfoot>
                             </tfoot>
-                            
+
                             <tbody>
                             @if(Cart::instance('createInstock')->count() > 0)
                                 @foreach(Cart::instance('createInstock')->content() as $item)
@@ -169,3 +170,4 @@
     @include('admin.stock.form')
     {!! Form::close() !!}
 @endsection
+

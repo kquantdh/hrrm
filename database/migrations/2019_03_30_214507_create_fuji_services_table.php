@@ -25,16 +25,18 @@ class CreateFujiServicesTable extends Migration
             $table->string('head_serial')->nullable($value=true);
             $table->string('nature_service');
             $table->string('status')->nullable($value=true);
-            $table->integer('entry');
-            $table->integer('discount');
-            $table->integer('discount_part');
-            $table->float('normal_hrs');
-            $table->float('night_hrs');
-            $table->float('off_hrs');
-            $table->float('holiday_hrs');
-            $table->integer('person_amount');
+            $table->integer('entry')->nullable($value=true);
+            $table->integer('discount')->nullable($value=true);
+            $table->integer('discount_part')->nullable($value=true);
+            $table->float('normal_hrs')->nullable($value=true);
+            $table->float('night_hrs')->nullable($value=true);
+            $table->float('off_hrs')->nullable($value=true);
+            $table->float('holiday_hrs')->nullable($value=true);
+            $table->integer('person_amount')->nullable($value=true);
             $table->text('problem')->nullable($value=true);
             $table->text('countermeasure')->nullable($value=true);
+            $table->text('countermeasure_report')->nullable($value=true);
+            $table->text('fmv_note')->nullable($value=true);
             $table->date('stock_recieve_date')->nullable($value=true);
             $table->date('inspection_done_date')->nullable($value=true);
             $table->date('start_inspection_date')->nullable($value=true);
@@ -46,9 +48,14 @@ class CreateFujiServicesTable extends Migration
             $table->float('part_amount')->nullable($value=true);
             $table->float('service_amount')->nullable($value=true);
             $table->boolean('is_viewed')->nullable($value=true);
-
-
-
+            $table->text('job_subject')->nullable($value=true);
+            $table->integer('transfer_head_time')->nullable($value=true);
+            $table->string('engineer_name')->nullable($value=true);
+            $table->float('addition_fee_amount')->nullable($value=true);
+            $table->float('head_charge')->nullable($value=true);
+            $table->float('transport_head_price')->nullable($value=true);
+            $table->float('part_amount_jpy')->nullable($value=true);
+            $table->float('part_amount_usd')->nullable($value=true);
             $table->timestamps();
         });
     }

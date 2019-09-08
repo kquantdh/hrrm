@@ -184,30 +184,14 @@
                                         <td>
 
                                             <div class="btn-group">
-                                                <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Actions
-                                                    <i class="fa fa-angle-down"></i>
-                                                </button>
+                                                <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Actions<i class="fa fa-angle-down"></i></button>
                                                 <ul class="dropdown-menu pull-left" role="menu">
-                                                    <li>
-                                                        <a data-toggle="modal" data-target="#large" href="{{url('admin/out-and-return-stock-detail/detail/'.$item->id)}}">
-                                                            <i class="fa fa-file-pdf-o"></i> Show </a>
-                                                    </li>
+                                                    <li><a data-toggle="modal" data-target="#large" href="{{url('admin/out-and-return-stock-detail/detail/'.$item->id)}}"><i class="fa fa-file-pdf-o"></i> Show </a></li>
                                                     @if($item->status == 3)
-                                                    <li>
-                                                        <a href="{{url('getoutstock/'.$item->id)}}">
-                                                            <i class="fa fa-file-pdf-o"></i> Edit Outstock </a>
-                                                    </li>
+                                                    <li><a href="{{url('getoutstock/'.$item->id)}}"><i class="fa fa-file-pdf-o"></i> Edit Outstock </a></li>
                                                     @endif
-
-                                                   <!-- <li>
-                                                        <a href="{{url('admin/outstock/delete/'.$item->id)}}">
-                                                            <i class="fa fa-file-pdf-o"></i> Delete Outstock </a>
-                                                    </li> -->
-                                                    <li>
-                                                            <a href="{{url('admin/outstock/out_stock_pdf/'.$item->id)}}">
-                                                                <i class="fa fa-file-pdf-o"></i> Print Out Stock  </a>
-                                                        </li>
-
+                                                    <li><a href="{{url('admin/outstock/delete/'.$item->id)}}"><i class="fa fa-file-pdf-o"></i> Delete Outstock </a></li>
+                                                    <li><a href="{{url('admin/outstock/out_stock_pdf/'.$item->id)}}"><i class="fa fa-file-pdf-o"></i> Print Out Stock  </a></li>
                                                 </ul>
                                             </div>
                                         </td>

@@ -17,6 +17,8 @@ class CreateHeadTypesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->float('price',12,2);
+            $table->float('samsung_price',12,2);
+
             $table->timestamps();
         });
     }

@@ -1,6 +1,10 @@
 <table style="width:100%;font-family: Arial;font-size: 15px;border: 1px solid black;border-collapse: collapse">
     <tr>
-        <td rowspan="4">Name-------</td>
+        <td rowspan="4"><div style="text-align: center">
+                <a href="{{url('/admin/outstock')}}">
+                    <img src="{{asset('img/FUJI-LOGO.png')}}" alt="logo" class="logo-default" width="120px" height="35px"    >
+                </a>
+            </div></td>
         <td colspan="5" style="font-weight:bold;font-size:20px;text-align:center;color: #394260;border-style:none">FUJI
             MACHINE VIETNAM CO., LTD.</td>
         
@@ -13,15 +17,19 @@
             Website: https://smt3.fuji.co.jp - Tax Code: 0105983244<br>
             TEL: (84-24) 37955323 FAX: (84-24) 37955324</td>
         
-        <td colspan="2">Inv No : {{ $fuji_service->sr_no }}</td>
+        <td colspan="2">Inv No : {{ $fuji_service->invoice }}</td>
     </tr>
     <tr>
         
-        <td colspan="2">PO No : {{ $fuji_service->sr_no }}</td>
+        <td colspan="2">PO No : {{ $fuji_service->po }}</td>
     </tr>
     <tr>
-        
-        <td colspan="2">Date : {{ $fuji_service->sr_no }}</td>
+        @if(!empty($fuji_service->fuji_service_time_detail->date_time_sr_start))
+            <td colspan="2">Date : {{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_sr_start ) )}}</td>
+        @else
+            <td colspan="2">Date:</td>
+        @endif
+
     </tr>
     <tr>
         <td colspan="8" style="font-weight:bold;font-size:20px;text-align:center">SERVICE REPORT</td>
@@ -31,24 +39,24 @@
         <td colspan="8" style="font-weight:bold;background-color:#f2f2f2">A. CUSTOMER</td>
     </tr>
     <tr>
-        <td>Name:</td>
-        <td colspan="4"></td>
+        <td style="width: 12%">Name:</td>
+        <td colspan="4">{{ $fuji_service->customer->full_name }}</td>
         
         <td>Site:</td>
         <td colspan="2"></td>
     </tr>
     <tr>
         <td>Address:</td>
-        <td colspan="7">Lot I8-1, Saigon Hi-Tech Park, Tang Nhon Phu B Ward, District 9, Ho Chi Minh City, Vietnam</td>
+        <td colspan="7">{{ $fuji_service->customer->address }}</td>
     <tr>
         <td>Telephone:</td>
-        <td colspan="4">(+84) 2837332030</td>
+        <td colspan="4">{{ $fuji_service->customer->mobile }}</td>
         <td>Contact Person:</td>
-        <td colspan="2">Kiet Ngo</td>
+        <td colspan="2">{{ $fuji_service->customer->person }}</td>
     </tr>
     <tr>
         <td>Tax code:</td>
-        <td colspan="4">0304905709</td>
+        <td colspan="4">{{ $fuji_service->customer->tax }}</td>
         <td colspan="3">Jabil</td>
     </tr>
     <tr>
@@ -56,7 +64,7 @@
     </tr>
     <tr>
         <td>Model:</td>
-        <td colspan="4">NXT II</td>
+        <td colspan="4">NXT III</td>
         <td>Serial No.:</td>
         <td colspan="2">M63S 1123</td>
     </tr>
@@ -103,7 +111,7 @@
     </tr>
     <tr>
         <td rowspan="2">Symptoms:</td>
-        <td colspan="7" rowspan="2"></td>
+        <td colspan="7" rowspan="2">{!!$fuji_service->sr_no." ".$fuji_service->job_subject !!}</td>
     </tr>
     <tr>
             
@@ -120,7 +128,7 @@
 
     <tr>
         <td rowspan="1">Comments:</td>
-        <td colspan="7">{!!$fuji_service->problem !!}</td>
+        <td colspan="7">{!!$fuji_service->countermeasure !!}</td>
     </tr>
     
     <tr>
@@ -134,7 +142,7 @@
         <td colspan="4" style="font-weight:bold;background-color:#f2f2f2">F. SERVICE BY</td>
     </tr>
     <tr>
-        <td colspan="4" rowspan="5" style="border-right-style:none">-Run hybrid calibration, pam , iddle<br>-Run hybrid calibration, pam , iddle</td>
+        <td colspan="4" rowspan="5" style="border-right-style:none"><br><br><br><br><br></td>
         <td colspan="4" rowspan="5" style="border-left-style:none"></td>
     </tr>
     <tr></tr>
@@ -146,13 +154,18 @@
         <td colspan="2">Signature</td>
         <td colspan="3">Co. Stamp</td>
         
-        <td colspan="3">Name : Quan, Nham, An Son</td>
+        <td colspan="3">Name : {{$fuji_service->engineer_name}}</td>
     </tr>
     <tr>
         <td colspan="2">Name:</td>
         <td colspan="3">Date:</td>
+        @if(!empty($fuji_service->fuji_service_time_detail->date_time_sr_start))
+            <td colspan="3">Date : {{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_sr_end ) )}}</td>
+        @else
+            <td colspan="3">Date:</td>
+        @endif
         
-        <td colspan="3">Date : 22-Nov-2018</td>
+
     </tr>
 
 
@@ -168,61 +181,80 @@
         <td>Date To</td>
         <td>Time To</td>
     </tr>
+
     <tr>
-        <td colspan="4" rowspan="16">-</td>
-        <td>18:00</td>
-        <td>18:00</td>
-        <td>18:00</td>
-        <td>18:00</td>
+        <td colspan="4" rowspan="16"></td>
+        @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_1_from ) )}}</td>
+        @else
+        <td> </td>
+        @endif
+        @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
+            <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_1_from ) )}}</td>
+        @else
+            <td> </td>
+        @endif
+        @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_to))
+            <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_1_to ) )}}</td>
+        @else
+            <td> </td>
+        @endif
+        @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_to))
+            <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_1_to ) )}}</td>
+        @else
+            <td> </td>
+        @endif
+
     </tr>
+
+    @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
     <tr>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_2_from ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_2_from ) )}}</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_2_to ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_2_to ) )}}</td>
     </tr>
+    @endif
+    @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
     <tr>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_3_from ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_3_from ) )}}</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_3_to ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_3_to ) )}}</td>
     </tr>
+    @endif
+    @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
     <tr>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_4_from ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_4_from ) )}}</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_4_to ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_4_to ) )}}</td>
     </tr>
+    @endif
+    @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
     <tr>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_5_from ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_5_from ) )}}</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_5_to ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_5_to ) )}}</td>
     </tr>
+    @endif
+    @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
     <tr>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_6_from ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_6_from ) )}}</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_6_to ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_6_to ) )}}</td>
     </tr>
+    @endif
+    @if(!empty($fuji_service->fuji_service_time_detail->date_time_1_from))
     <tr>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-        </tr>
-        <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_7_from ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_7_from ) )}}</td>
+        <td>{{ date( "d-M-Y", strtotime( $fuji_service->fuji_service_time_detail->date_time_7_to ) )}}</td>
+        <td>{{ date( "h:i", strtotime( $fuji_service->fuji_service_time_detail->date_time_7_to ) )}}</td>
+    </tr>
+    @endif
 
     <tr>
         <td>Labor Hrs:</td>
@@ -252,7 +284,25 @@
     </tr>
     <tr>
         <td>Total:</td>
-        <td style="background-color: #ffb3cc">117.000.000</td>
+        <!-- '1'=>'Quotation','2'=>'Q&P','3'=>'Q&S','4'=>'Q&P&S','5'=>'Q&P&S&H','6'=>'No Quotation' -->
+        @switch($fuji_service->job_type)
+        @case(1)
+        <td style="padding-left:10px;background-color: #ffb3cc">Only Quotation</td>
+        @break
+        @case(2)
+            <td style="padding-left:10px;background-color: #ffb3cc">Only Part</td>
+        @break
+        @default('3')
+            <td style="padding-left:10px;background-color: #ffb3cc">{{number_format($fuji_service->service_amount)}}</td>
+        @break
+        @case(4)
+            <td style="padding-left:10px;background-color: #ffb3cc">{{number_format($fuji_service->service_amount+$fuji_service->part_amount)}}</td>
+        @break
+        @case(5)
+            <td style="padding-left:10px;background-color: #ffb3cc">{{number_format($fuji_service->head_type->price)}}</td>
+        @break
+        @endswitch
+
         <td>VND</td>
         <td><div class="row">
                 

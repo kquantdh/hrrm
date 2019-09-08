@@ -14,6 +14,8 @@ use App\Out_stock;
 use App\Out_stock_detail;
 use App\Part_price_list;
 use App\Fuji_service_detail;
+use App\Repositories\Phone\PhoneRepositoryInterface;
+
 use Auth;
 use Session;
 use PDF;
@@ -23,35 +25,86 @@ class OutStockController extends Controller
 
     private $_cust=[];
 
-    public function __construct()
+    public function __construct(PhoneRepositoryInterface $phone)
     {
 
         $customers=Customer::all();
         foreach ($customers as $customer){
             $this->_cust[$customer->id]=$customer->name;
         }
+        $this->phone = $phone;
+
     }
-
-        
-    public function index(Request $request)
+    public function  change_status1( Request $request)
     {
-        $limit = 10;
-        $page = $request->get('page',1);
-        $stt = ((int)$page-1)*$limit;
-        $out_stocks=Out_stock::select('out_stocks.*')
-                         ->join('users','out_stocks.user_id','=','users.id');
+        $id = $request->get('id',0);
+        $data['status'] = $request->get('param');
+        $out_stocks = Out_stock::find($id);
+        $status_old = $out_stocks->status;
+        $out_stocks->status = $data['status'];
+        $out_stock_details = Out_stock_detail::where('out_stock_id', $id)->get();
+        $is_ok=0;
+        foreach ($out_stock_details as $item) {
+            $temp_ = In_stock_detail::where('barcode', $item->barcode)->first();
+            if ($temp_->balance < $item->out_quantity) {
+                $is_ok=1;
+            }
+
+        }
+        $response = [];
+        foreach ($out_stock_details as $item) {
+            if ($out_stocks->status == 4 && $out_stocks->status != $status_old && $status_old!=5&&$is_ok==0) {
+
+                $product = In_stock_detail::where('barcode', $item->barcode)->first();
+                $out_stock_details = Out_stock_detail::where('barcode', $item->barcode)->where('out_stock_id',$out_stocks->id)->first();
+                $product->balance = $product->balance - $item->out_quantity;
+                $out_stock_details->status =$data['status'];
+                $out_stocks = Out_stock::findOrFail($id);
+                if (Auth::check()) {
+                    $out_stocks->user_id = Auth::user()->id;
+                } else {
+                    $out_stocks->user_id = null;
+                }
 
 
-        $out_stocks->where('users.name','like','%'.$request->keyword.'%')
-            ->orwhere('out_stocks.remark','like','%'.$request->keyword.'%');
-                        
-        $out_stocks=$out_stocks->orderBy('id', 'DESC')->paginate(10);
-        
-       
-        return view('admin.out_stock.show',
-            ['out_stocks'=>$out_stocks,
-                'stt'=>$stt
-                ]);
+                $out_stocks->status = $data['status'];
+                $product->save();
+                $out_stock_details->save();
+                $out_stocks->save();
+
+
+
+            }elseif($out_stocks->status == 5 && $status_old  ==4 && Auth::user()->group_id==1 &&$out_stocks->type_form!='PR' ){
+                $product = In_stock_detail::where('barcode', $item->barcode)->first();
+                $out_stock_details = Out_stock_detail::where('barcode', $item->barcode)->where('out_stock_id',$out_stocks->id)->first();
+                $product->balance = $product->balance + $item->out_quantity;
+                $out_stock_details->status =5;
+                $out_stocks = Out_stock::findOrFail($id);
+                if (Auth::check()) {
+                    $out_stocks->return_user_id = Auth::user()->id;
+                } else {
+                    $out_stocks->return_user_id = null;
+                }
+                $out_stocks->status = $data['status'];
+                $out_stocks->return_date = date('Y-m-d');
+                $product->save();
+
+                $out_stock_details->save();
+                $out_stocks->save();
+
+
+
+            }else{
+                return redirect()->back()->withErrors('You can not change status. Please check quantity or status or access permission or type form PR!!');
+
+            }
+        }
+        return response()->json($response);
+
+
+
+
+
     }
     public function change_status($id, Request $request)
     {
@@ -114,6 +167,57 @@ class OutStockController extends Controller
         return redirect('admin/outstock');
     }
 
+    public function index1(Request $request){
+        return view('admin.out_stock.show1');
+    }
+    public function  getOutStockList(Request $request)
+    {
+        $param = [];
+        $param['status'] = ($request->has('status')) ? $request->get('status') : '';
+        $param['userOut'] = ($request->has('userOut')) ? $request->get('userOut') : '';
+        $param['userReturn'] = ($request->has('userReturn')) ? $request->get('userReturn') : '';
+        $param['partOutNo'] = ($request->has('partOutNo')) ? $request->get('partOutNo') : '';
+        $param['customer'] = ($request->has('customer')) ? $request->get('customer') : '';
+        $param['typeForm'] = ($request->has('typeForm')) ? $request->get('typeForm') : '';
+        $param['dateFrom'] = ($request->has('dateFrom')) ? date('Y-m-d', strtotime($request->get('dateFrom'))) : date('Y-m-d');
+        $param['dateTo'] = ($request->has('dateTo')) ? date('Y-m-d', strtotime($request->get('dateTo'))) : date('Y-m-d');
+
+        $column = $request->get("columns");
+        $order = $request->get('order');
+        $index=$order[0]["column"];
+        $sort = $order[0]["dir"];
+        $start = $request->get('start');
+        $length = $request->get('length');
+        $columnNameSort = $column[(int)$index]["name"];
+        $data = [];
+        $data['draw'] = (int)$request->get("draw", "int");
+        $dataReport = Out_stock::searchAndList($param['status'],$param['userOut'],$param['userReturn'],$param['partOutNo'],$param['customer'],$param['typeForm'],$param['dateFrom'],$param['dateTo'],$start, $length, $columnNameSort, $sort);
+        $data['recordsTotal'] = (int)$dataReport['count_record'];
+        $data['recordsFiltered'] = (int)$dataReport['count_record'];
+        $data['data'] = $dataReport['record']->toArray();
+        return response()->json($data);
+    }
+
+        
+    public function index(Request $request)
+    {
+        $limit = 10;
+        $page = $request->get('page',1);
+        $stt = ((int)$page-1)*$limit;
+        $out_stocks=Out_stock::select('out_stocks.*')->join('users','out_stocks.user_id','=','users.id');
+        $out_stocks->where('users.name','like','%'.$request->keyword.'%')
+            ->orwhere('out_stocks.remark','like','%'.$request->keyword.'%');
+                        
+        $out_stocks=$out_stocks->orderBy('id', 'DESC')->paginate(10);
+        
+       
+        return view('admin.out_stock.show',
+            ['out_stocks'=>$out_stocks,
+                'stt'=>$stt
+                ]);
+    }
+
+
     public function detail($id ,Request $request)
     {   
         $out_stock_details=Out_stock_detail::select('out_stock_details.*')
@@ -174,18 +278,17 @@ class OutStockController extends Controller
                           ->where('in_stock_details.is_deleted',0);
         if ($request->has('whetherBalance')){
             if(($request->whetherBalance)=='noBalance') {
-                $in_stock_details->whereColumn('in_stock_details.quantity', '!=', 'in_stock_details.balance');
+                $in_stock_details->whereColumn('in_stock_details.qty', '!=', 'in_stock_details.balance');
             }elseif(($request->whetherBalance)=='balance'){
-                $in_stock_details->whereColumn('in_stock_details.quantity', '=', 'in_stock_details.balance');
+                $in_stock_details->whereColumn('in_stock_details.qty', '=', 'in_stock_details.balance');
             }else{
 
             }
         }
 
 
-        if ($request->has('belongto')){
+        if (($request->has('belongto'))){
             if(($request->belongto)=='FOC') {
-
                 $in_stock_details->where('in_stock_details.belongto','=','WRR');
                 $in_stock_details->orwhere('in_stock_details.belongto','=','FOC');
                 $in_stock_details->orwhere('in_stock_details.belongto','=','ORD');
@@ -246,7 +349,7 @@ class OutStockController extends Controller
             Session::flash('out_of_stock', 'You clicked over 1 time for one part. Please choose other part!');
         }else {
             Cart::instance('createOutstock')->add(array('id' => $buy->barcode,
-            'name' => $buy->name, 
+            'name' => $buy->part_name,
             'qty' => 1,
             'price' => 1,
     'options' => array(  'part_no'=>$buy->part_id,
@@ -271,7 +374,7 @@ class OutStockController extends Controller
             Session::flash('out_of_stock', 'You clicked over 1 time for one part. Please choose other part!');
         }else {
             Cart::instance('editOutstock')->add(array('id' => $buy->barcode,
-                'name' => $buy->name,
+                'name' => $buy->part_name,
                 'qty' => 1,
                 'price' => 1,
                 'options' => array(  'part_no'=>$buy->part_id,
@@ -288,8 +391,8 @@ class OutStockController extends Controller
         $out_stocks = Out_stock::where('id', $id)->first();  
         $list = Out_stock_detail::where('out_stock_id', $id)->get();
         foreach ($list as $buy){
-            Cart::instance('editOutstock')->add(array('id' => $buy->barcode, 'name' => $buy->in_stock_detail->name, 'qty' =>$buy->out_quantity, 'price' => 1,
-            'options' => array('part_no'=>$buy->in_stock_detail->part_id,
+            Cart::instance('editOutstock')->add(array('id' => $buy->barcode, 'name' => $buy->in_stock_detail->part_name, 'qty' =>$buy->out_quantity, 'price' => 1,
+                'options' => array('part_no'=>$buy->in_stock_detail->part_id,
             'rep_new'=>$buy->rep_new,
             'belongto'=>$buy->belongto,
             'location'=>$buy->location)));
@@ -412,6 +515,7 @@ class OutStockController extends Controller
                 $ord = new Out_stock();
                 if (Auth::check()) {
                     $ord->user_id = Auth::user()->id;
+                    $ord->return_user_id = Auth::user()->id;
                 } else {
                     $ord->user_id = null;
                 }
@@ -419,6 +523,7 @@ class OutStockController extends Controller
 
                 $ord->remark =$request->remark;
                 $ord->out_date =  date('Y-m-d');
+                $ord->return_date =  date('Y-m-d');
                 $ord->customer_id =$request->customer_id;
                 $ord->type_form =$request->type_form;
                 $ord->loan_date_no =$request->loan_date_no;

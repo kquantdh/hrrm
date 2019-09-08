@@ -22,6 +22,8 @@ class CreateFujiServiceDetailsTable extends Migration
             $table->integer('quantity');
             $table->string('vn_name')->nullable($value=true);
             $table->string('location')->nullable($value=true);
+            $table->integer('import_tax')->nullable($value=true);
+            $table->float('additional_fee')->nullable($value=true);
 
             $table->timestamps();
         });

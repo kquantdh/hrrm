@@ -19,13 +19,13 @@ class CreateInStockDetailsTable extends Migration
             $table->integer('number');
             $table->string('barcode');
             $table->string('part_id');
-            $table->string('name');
+            $table->string('part_name');
             $table->string('belongto');
-            $table->integer('quantity');
+            $table->integer('qty');
             $table->integer('balance');
             $table->string('location');
             $table->string('thumbnail')->nullable($value=true);
-            $table->string('detail')->nullable($value=true);
+            $table->string('detail_stk')->nullable($value=true);
             $table->boolean('is_deleted')->nullable($value=true);
             $table->timestamps();
         });

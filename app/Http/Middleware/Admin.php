@@ -23,6 +23,7 @@ class Admin
 
     public function handle($request, Closure $next,$guard = null)
     {
+        //dd(\Route::currentRouteName());
         if (Auth::guard($guard)->guest()){
             return redirect('login');
         }elseif($this->auth->user()->group_id!=1){
