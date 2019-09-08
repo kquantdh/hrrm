@@ -7,9 +7,10 @@ use App\Part_price_list;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 
-class PartPriceListsImport implements ToModel,WithHeadingRow
+class PartPriceListsImport implements ToModel,WithHeadingRow,WithBatchInserts,WithChunkReading
 {
 
     /**
@@ -31,6 +32,15 @@ class PartPriceListsImport implements ToModel,WithHeadingRow
 
         ]);
         
+    }
+    public function batchSize(): int
+    {
+        return 6000;
+    }
+
+    public function chunkSize(): int
+    {
+        return 6000;
     }
 
 }

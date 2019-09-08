@@ -40,7 +40,7 @@ class LoginController extends Controller
         if ($this->auth->user()->group_id==1){
             return '/admin/fujiservice';
         }elseif ($this->auth->user()->group_id==2){
-            return '/home/stock';
+            return '/';
         }else{
             return '/';
         }

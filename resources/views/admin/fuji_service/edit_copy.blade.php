@@ -1,7 +1,7 @@
 @extends('layouts.admin')
-@section('title') Copy Head History @endsection
+@section('title') Copy Job History @endsection
 @section('level1') Copy @endsection
-@section('formName') Edit head history @endsection
+@section('formName') Edit Job history @endsection
 @section('content')
    
            
@@ -71,9 +71,8 @@
                                     <th class="numeric"> Part Name </th>
                                     <th class="numeric"> Repnews </th>
                                     <th class="numeric"> Machine</th>
-                                    <th class="numeric"> Price </th>
                                     <th class="numeric"> VN name  </th>
-                                    
+                                    <th class="numeric"> Material </th>
                                     <th class="numeric"> Action </th>
                                 </tr>
                                 </thead>
@@ -87,8 +86,8 @@
                                         <td class="center">{{$item->name}}</td>
                                         <td class="center">{!! $item->rep_new!!}</td>
                                         <td class="center">{{$item->machine}}</td>
-                                        <td class="center"> {{$item->price}} </td>
                                         <td class="center"> {{$item->vn_name}}</td>
+                                        <td class="center"> {{$item->material}} </td>
 
 
                                             <td><a title="Add to Cart" href="{!! url('edit_muahang_copy',[$item->id]) !!}"><i class="fa fa-plus"></i> Add</a>
@@ -130,7 +129,8 @@
                                     <th> Part No </th>
                                     <th> Part Name </th>
                                     <th> Repnews </th>
-                                    <th> Price </th>
+                                    <th> Imp_ tax</th>
+                                    <th> Add_ Fee </th>
                                     <th> Q'ty </th>
                                     <th> Action </th>
                                 </tr>
@@ -141,15 +141,19 @@
                                 @if(Cart::instance('editFujiServiceCopy')->count() > 0)
                                     @foreach(Cart::instance('editFujiServiceCopy')->content() as  $item)
                                         <tr class="odd gradeX">
+                                            {!! Form::open(['method' => 'POST','url' => [ 'admin/fujiservice/create/edit/update-edit-cart-copy', $item->id]]) !!}
                                                 <td class="center"></td>
                                             <td class="center"> {{$item->id}} </td>
                                             <td class="center">{{$item->name}} </td>
                                             <td class="center"> {!! $item->options->rep_new !!}</td>
-                                            <td class="center"> {{$item->price}} </td>
-                                            
+
+                                            <td style="width:5%" >
+                                                <input type="number" name="import_tax" value="{{$item->options->import_tax}}" style="width:100%" /></td>
+                                            <td style="width:5%" >
+                                                <input type="number" name="additional_fee" value="{{$item->options->additional_fee}}" style="width:100%" /></td>
                                             <td  style="width:15%">
 
-                                                {!! Form::open(['method' => 'POST','url' => [ 'admin/fujiservice/create/edit/update-edit-cart-copy', $item->id]]) !!}
+
                                                 <input type="number" name="qty" value="{{$item->qty}}"   style="width:25%"/>
                                                 <input type="submit" value="Update"  style="width:35%"/>
                                                 {!! Form::close() !!}
@@ -171,7 +175,7 @@
 
     
     {!! Form::model($fuji_service, ['method'=>'PUT','files'=>'true','url'=>['admin/fujiservice/create/edit-copy',$fuji_service->id], 'role'=>'form']) !!}
-    @include('admin.fuji_service.form')
+    @include('admin.fuji_service.form.form_edit_copy')
     {!! Form::close() !!}
 
 @endsection

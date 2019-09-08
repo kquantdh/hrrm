@@ -1,6 +1,5 @@
+
 <!-- BEGIN PAGE CONTENT INNER -->
-
-
 <div class="portlet-body form">
     <!-- BEGIN FORM-->
         <div class="form-body">
@@ -57,9 +56,8 @@
                                 <span class="required" aria-required="true"> * </span>
                             </label>
                             <div class="col-md-9">
-                                {!! Form::select('job_type',['1'=>'Quotation','2'=>'Q&P',
-                                '3'=>'Q&S','4'=>'Q&P&S','5'=>'Q&P&S&H','6'=>'No Quotation'
-                                ],null,['class'=>'form-control'])!!}
+                                {!! Form::select('job_type',['1'=>'Q&P','2'=>'Q&S','3'=>'Q&P&S','4'=>'Q&P&S&H',
+                                                             '5'=>'No Q&P','6'=>'No Q&S','7'=>'No Q&P&S','8'=>'No Q&P&S&H'],null,['class'=>'form-control'])!!}
 
                             </div>
                         </div>
@@ -77,7 +75,7 @@
                             <div class="col-md-9">
                                 {!! Form::select('status',['Stock Recieve'=>'Stock Recieve','Start Inspection'=>'Start Inspection',
                                 'Inspection Done'=>'Inspection Done','Sent Quotation'=>'Sent Quotation','Got PO'=>'Got PO','Got Part'=>'Got Part',
-                                'Repair Done'=>'Repair Done','Delivery'=>'Delivery'],null,['class'=>'form-control'])!!}
+                                'Repair Done'=>'Repair Done','Delivery'=>'Delivery','Got SR'=>'Got SR'],null,['class'=>'form-control'])!!}
 
                             </div>
                         </div>
@@ -107,7 +105,7 @@
                                 <span class="required" aria-required="true"> * </span>
                             </label>
                             <div class="col-md-9">
-                                {!! Form::select('nature_service',['Package'=>'Package','FOC'=>'FOC','Warranty'=>'Warranty'],null,["class"=>"form-control"]) !!}
+                                {!! Form::select('nature_service',['PKG'=>'PKG','FOC'=>'FOC','WRT'=>'WRT','SGL'=>'SGL'],null,["class"=>"form-control"]) !!}
                             </div>
                         </div>
                     </div>
@@ -182,7 +180,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Serial</label>
                             <div class="col-md-9">
-                                {!!Form::text('head_serial',null,['class'=>'form-control','placeholder'=>'']) !!}
+                                {!!Form::text('head_serial',null,['class'=>'form-control','placeholder'=>'Ex: HZ0D1 007736']) !!}
                                 {!! $errors->first('head_serial','<span style="color:red">:message</span>') !!}
                             </div>
                         </div>
@@ -198,14 +196,25 @@
                             </div>
                         </div>
                     </div>
-                   
-                </div>
-
-
-
-
 
                 </div>
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Discount Head</label>
+                            <div class="col-md-9">
+                                {!!Form::text('discount_head',null,['class'=>'form-control','placeholder'=>'Ex VND: 1000000']) !!}
+                                {!! $errors->first('discount_head','<span style="color:red">:message</span>') !!}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                </div>
+            @yield('form_more_service')
+            @yield('form_time')
 
                 <div class="portlet-title">
                     <div class="caption font-dark">
@@ -235,6 +244,28 @@
                         </div>
                     </div>
                 </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Countermeasure Report</label>
+                        <div class="col-md-9">
+                            {!! Form::textarea('countermeasure_report', null, ['class' => 'form-control ckeditor', 'data-required' => '1']) !!}
+                            {!! $errors->first('countermeasure_report','<span style="color:red">:message</span>') !!}
+                        </div>
+                    </div>
+                </div>
+                <!--/row-->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="color: red">FMV Note</label>
+                        <div class="col-md-9">
+                            {!! Form::textarea('fmv_note', null, ['class' => 'form-control ckeditor', 'data-required' => '1']) !!}
+                            {!! $errors->first('fmv_note','<span style="color:red">:message</span>') !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             </div>
@@ -246,13 +277,9 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green">Submit</button>
-                                <div class="btn-group">
-                                <a href="{{ url('admin/fujiservice/create_more_service') }}" id="sample_editable_1_2_new" class="btn sbold yellow">More
-                                </a>
-                            </div>
-                                <button type="button" class="btn default">Cancel</button>
-
+                                <button type="submit" class="btn green")>Submit</button>
+                                    @yield('form_service')
+                                <a href="{{ url('admin/fujiservice') }}" class="btn default"> Cancel</a>
                             </div>
                         </div>
                     </div>
@@ -264,4 +291,3 @@
 </div>
 
 <!-- END PAGE CONTENT INNER -->
-  

@@ -28,26 +28,15 @@
     </style>
 </head>
 <body>
-@switch($fuji_services->job_type)
-@case('1')
-@include('admin.fuji_service.pdf_quotation_table.table_quotation_part')
-@break
-@case('2')
-@include('')
-@break
-@case('3')
-@include('')
-@break
-@case('4')
-@include('admin.fuji_service.pdf_quotation_table.table_quotation_part_service')
-@break
-@case('5')
-@include('')
-@break
-@case('6')
-@include('')
-@break
-@endswitch
+@if($fuji_services->job_type==1 ||$fuji_services->job_type==5)
+    @include('admin.fuji_service.pdf_quotation_table.table_quotation_part')
+@elseif($fuji_services->job_type==2 ||$fuji_services->job_type==6)
+
+@elseif($fuji_services->job_type==3 ||$fuji_services->job_type==7)
+
+@else
+    @include('admin.fuji_service.pdf_quotation_table.table_quotation_part_service')
+@endif
 
 </body>
 </html>

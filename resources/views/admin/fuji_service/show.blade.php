@@ -1,9 +1,6 @@
 @extends('layouts.admin')
 @section('title') FMV JOB MANAGEMENT @endsection
 @section('content')
-  
-       
-
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -11,7 +8,7 @@
                             <div class="portlet-title">
                                 <div class="caption font-dark">
                                     <i class="icon-settings font-dark"></i>
-                                    <span class="caption-subject bold uppercase"> FMV Head Repair History</span>
+                                    <span class="caption-subject bold uppercase"> FMV Job History</span>
                                 </div>
 
                             </div>
@@ -69,9 +66,7 @@
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1_2">
                                     <thead>
                                     <tr>
-                                        <th>
-                                           
-                                        </th>
+                                        <th></th>
                                         <th> Job No </th>
                                         <th> Cust. </th>
                                         <th> Type </th>
@@ -113,28 +108,32 @@
                                         <td>
                                             
                                         </td>
-                                        <td>J{{date('Y-m-d')[2]}}{{date('Y-m-d')[3]}}{{str_pad($item->id, 4, '0',STR_PAD_LEFT)}}
+                                        <td>J{{ date('y', strtotime($item->created_at))}}{{str_pad($item->id, 4, '0',STR_PAD_LEFT)}}
                                             </td>
                                         <td class="center"> {{$item->customer->name}}  </td>
                                         <td >
                                         @switch($item->job_type)
-                                        @case(1)
-                                                Quo.
+                                            @case('1')
+                                            Q&P
                                             @break
-                                        @case(2)
-                                                Q&P
+                                            @case('2')
+                                            Q&S
                                             @break
-                                        @case(3)
-                                                Q&S
+                                            @case('3')
+                                            Q&P&S
                                             @break
-                                        @case(4)
-                                                Q&P&S
+                                            @case('4')
+                                            Q&P&S&H
                                             @break
-                                        @case(5)
-                                                 Q&P&S&H
+                                            @case('5')
+                                            No Q&P
                                             @break
-                                        @case(6)
-                                             No Quo.
+                                            @case('6')
+                                            No Q&S
+                                            @case('7')
+                                            No Q&P&S
+                                            @case('8')
+                                            No Q&P&S&H
                                             @break
                                         @endswitch
                                         </td>
@@ -148,28 +147,49 @@
                                         <td class="center"> {{$item->nature_service}} </td>
                                         @switch($item->status)
                                         @case('Stock Recieve')
-                                        <td>
-                                            <span class="label label-sm label-danger">{{$item->status}} </span>
+                                        <td style="color: red;font-weight: bold">
+                                            {{$item->status}}
                                         </td>
                                         @break
                                            @case('Start Inspection')
-                                            <td>
-                                                <span class="label label-sm label-warning">{{$item->status}} </span>
+                                            <td  style="color:#ffdf09;font-weight: bold">
+                                                {{$item->status}}
                                             </td>
                                         @break
-                                        @default('Start Inspection')
-                                            <td>
-                                                <span class="label label-sm label-success">{{$item->status}} </span>
-                                            </td>
+
+                                        @case('Inspection Done')
+                                        <td style="color:#ff20ee;font-weight: bold">
+                                            {{$item->status}}
+                                        </td>
+                                        @break
+                                        @case('Sent Quotation')
+                                        <td style="color:chocolate;font-weight: bold">
+                                           {{$item->status}}
+                                        </td>
+                                        @break
+                                        @case('Got PO')
+                                        <td style="color:black;font-weight: bold">
+                                           {{$item->status}}
+                                        </td>
+                                        @break
+                                        @case('Got Part')
+                                        <td style="color:green;font-weight: bold">
+                                            {{$item->status}}
+                                        </td>
                                         @break
                                         @case('Repair Done')
-                                        <td>
-                                            <span class="label label-sm label-info">{{$item->status}} </span>
+                                        <td style="color:chartreuse;font-weight: bold">
+                                            {{$item->status}}
                                         </td>
                                         @break
                                         @case('Delivery')
-                                        <td>
-                                            <span class="label label-sm label-info">{{$item->status}} </span>
+                                        <td style="color:#edff0a;font-weight: bold">
+                                            {{$item->status}}
+                                        </td>
+                                        @break
+                                        @case('Got SR')
+                                        <td style="color: blue;font-weight: bold">
+                                            {!! $item->status !!}
                                         </td>
                                         @break
                                         @endswitch
@@ -183,7 +203,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu pull-left" role="menu">
                                                     <li>
-                                                        <a href="{{url('getcart/'.$item->id)}}">
+                                                        <a href="{{url('getcart/'.$item->id)}}" onclick="return confirm('Please save before exit. If No, all part is deleted')">
                                                             <i class="fa fa-file-pdf-o"></i> Edit </a>
 
                                                     </li>
@@ -197,13 +217,17 @@
                                                             <i class="fa fa-file-pdf-o"></i> Delete </a>
                                                     </li>
                                                     <li>
+                                                        <a href="{{url('admin/fujiservice/head_tag/'.$item->id)}}">
+                                                            <i class="fa fa-file-pdf-o"></i> Head Tag </a>
+                                                    </li>
+                                                    <li>
                                                         
                                                         <a href="{{ url('admin/fujiservice/service-report/'.$item->id) }}">
                                                             <i class="fa fa-file-pdf-o"></i> SR Report</a>
                                                     </li>
                                                     
                                                     <li>
-                                                        <a href="{{ url('admin/fujiservice/head-repair-report/'.$item->id) }}">
+                                                        <a href="{{ url('admin/fujiservice/view-head-repair-report/'.$item->id) }}">
                                                             <i class="fa fa-file-pdf-o"></i> HR Report</a>
                                                     </li>
                                                     <li>

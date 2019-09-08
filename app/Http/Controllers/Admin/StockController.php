@@ -19,6 +19,66 @@ use Session;
 
 class StockController extends Controller
 {
+    public function index(Request $request){
+        return view('admin.stock.index');
+    }
+    public function  getInStockList(Request $request)
+    {
+        $param = [];
+        $param['inv_no'] = ($request->has('inv_no')) ? $request->get('inv_no') : '';
+        $param['name1'] = ($request->has('name1')) ? $request->get('name1') : '';
+        $param['po'] = ($request->has('po')) ? $request->get('po') : '';
+        $param['remark'] = ($request->has('remark')) ? $request->get('remark') : '';
+        $param['dateFrom'] = ($request->has('dateFrom')) ? date('Y-m-d', strtotime($request->get('dateFrom'))) : date('Y-m-d');
+        $param['dateTo'] = ($request->has('dateTo')) ? date('Y-m-d', strtotime($request->get('dateTo'))) : date('Y-m-d');
+
+        $column = $request->get("columns");
+        $order = $request->get('order');
+        $index=$order[0]["column"];
+        $sort = $order[0]["dir"];
+        $start = $request->get('start');
+        $length = $request->get('length');
+        $columnNameSort = $column[(int)$index]["name"];
+        $data = [];
+        $data['draw'] = (int)$request->get("draw", "int");
+        $dataReport = In_stock::searchAndList($param['inv_no'],$param['name1'],$param['po'],$param['remark'],$param['dateFrom'],$param['dateTo'],$start, $length, $columnNameSort, $sort);
+        $data['recordsTotal'] = (int)$dataReport['count_record'];
+        $data['recordsFiltered'] = (int)$dataReport['count_record'];
+        $data['data'] = $dataReport['record']->toArray();
+        return response()->json($data);
+    }
+    public function index1(Request $request){
+        return view('admin.stock.show_advance');
+    }
+    public function  getPartList(Request $request)
+    {
+        $param = [];
+        $param['partNo'] = ($request->has('partNo')) ? $request->get('partNo') : '';
+        $param['part_name'] = ($request->has('part_name')) ? $request->get('part_name') : '';
+        $param['belongto'] = ($request->has('belongto')) ? $request->get('belongto') : '';
+        $param['barcode'] = ($request->has('barcode')) ? $request->get('barcode') : '';
+        $param['location'] = ($request->has('location')) ? $request->get('location') : '';
+        $param['balance'] = ($request->has('balance')) ? $request->get('balance') : '';
+        $param['compare'] = ($request->has('compare')) ? $request->get('compare') : '';
+        $param['inv_no'] = ($request->has('inv_no')) ? $request->get('inv_no') : '';
+        $param['po_no'] = ($request->has('po_no')) ? $request->get('po_no') : '';
+        $param['detail_stk'] = ($request->has('detail_stk')) ? $request->get('detail_stk') : '';
+        $column = $request->get("columns");
+        $order = $request->get('order');
+        $index=$order[0]["column"];
+        $sort = $order[0]["dir"];
+        $start = $request->get('start');
+        $length = $request->get('length');
+        $columnNameSort = $column[(int)$index]["name"];
+        $data = [];
+        $data['draw'] = (int)$request->get("draw", "int");
+        $dataReport = In_stock_detail::searchAndList($param['partNo'],$param['part_name'],$param['belongto'],$param['barcode'],$param['location'],$param['balance'],$param['inv_no'],$param['po_no'],$param['detail_stk'],$param['compare'],$start, $length, $columnNameSort, $sort);
+        $data['recordsTotal'] = (int)$dataReport['count_record'];
+        $data['recordsFiltered'] = (int)$dataReport['count_record'];
+        $data['data'] = $dataReport['record']->toArray();
+        return response()->json($data);
+    }
+
 
     public function thumbnail($id ,Request $request)
     {
@@ -73,112 +133,14 @@ class StockController extends Controller
                 'in_stocks'=>$in_stocks]);
     }
 
-    public function show(Request $request)
-    {
-        $limit = 5;
-        $page = $request->get('page',1);
-        $stt = ((int)$page-1)*$limit;
 
-        $in_stock_details=In_stock_detail::select('in_stock_details.in_stock_id','in_stock_details.barcode','in_stock_details.part_id','in_stock_details.id',
-            'in_stock_details.belongto','in_stock_details.quantity','in_stock_details.balance','in_stock_details.location','in_stock_details.thumbnail','in_stock_details.detail','in_stock_details.is_deleted'
-        )
-                         ->join('in_stocks','in_stock_details.in_stock_id','=','in_stocks.id')
-                         ->join('part_price_lists','in_stock_details.part_id','=','part_price_lists.id')
-                         ->where('in_stock_details.is_deleted', 0);
-
-        if ($request->has('whetherBalance')){
-            if(($request->whetherBalance)=='noBalance') {
-                $in_stock_details->whereColumn('in_stock_details.quantity', '!=', 'in_stock_details.balance');
-            }elseif(($request->whetherBalance)=='balance'){
-                $in_stock_details->whereColumn('in_stock_details.quantity', '=', 'in_stock_details.balance');
-            }else{
-
-            }
-        }
-
-
-         if ($request->has('belongto')){
-             if(($request->belongto)=='FOC') {
-
-                 $in_stock_details->where('in_stock_details.belongto','=','WRR');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','FOC');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','ORD');
-             }elseif (($request->belongto)=='LOAN'){
-                 $in_stock_details->where('in_stock_details.belongto','=','1FMV');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','1FMA');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','1FMMC');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','1HCM');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','2FMV');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','2FMA');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','2FMMC');
-                 $in_stock_details->orwhere('in_stock_details.belongto','=','2HCM');
-
-             }
-             else{
-                 $in_stock_details->where('in_stock_details.belongto','=',$request->belongto);
-             }
-         }
-
-        if ($request->fieldChoose=='part_id'){
-            $in_stock_details->where('part_price_lists.id','like','%'.$request->keyword1.'%')
-                ;}
-        if ($request->fieldChoose=='name'){
-            $in_stock_details->where('part_price_lists.name','like','%'.$request->keyword1.'%')
-            ;}
-         if ($request->fieldChoose=='location'){
-                $in_stock_details->where('in_stock_details.location','like','%'.$request->keyword2.'%')
-             ;} 
-         if ($request->fieldChoose=='barcode'){
-                $in_stock_details->where('in_stock_details.barcode','like','%'.$request->keyword1.'%')
-             ;} 
-         if ($request->fieldChoose=='inv_no'){
-                $in_stock_details->where('in_stocks.inv_no','like','%'.$request->keyword2.'%')
-             ;}      
-         if ($request->fieldChoose=='po_no'){
-                $in_stock_details->where('in_stocks.po_no','like','%'.$request->keyword2.'%')
-             ;}
-
-
-        $in_stock_details=$in_stock_details->orderBy('id', 'DESC')->paginate(5);
-        return view('admin.stock.show',
-            ['in_stock_details'=>$in_stock_details,
-                'stt'=>$stt
-                ]);
-    }
     public function showAdvance(Request $request)
     {
-        $limit = 5;
-        $page = $request->get('page',1);
-        $stt = ((int)$page-1)*$limit;
 
-        $in_stock_details=In_stock_detail::select('in_stock_details.*')
-            ->join('in_stocks','in_stock_details.in_stock_id','=','in_stocks.id')
-            ->join('part_price_lists','in_stock_details.part_id','=','part_price_lists.id')
-            ->where('in_stock_details.is_deleted', 0)->get();
-
-        return view('admin.stock.show_advance',
-            ['in_stock_details'=>$in_stock_details,
-                'stt'=>$stt
-            ]);
+        return view('admin.stock.show_advance' );
     }
     
-    public function index(Request $request)
-    {
-        $in_stocks=In_stock::select('in_stocks.*')
-                         ->join('users','in_stocks.user_id','=','users.id')
-                          ->where('in_stocks.is_deleted',0)->get();
-        /*$in_stocks->where('users.name','like','%'.$request->keyword.'%')
-                        ->orwhere('in_stocks.inv_no','like','%'.$request->keyword.'%')
-                        ->orwhere('in_stocks.inv_no','like','%'.$request->keyword.'%');*/
-                        
-
-        
-        
-        return view('admin.stock.index',
-            ['in_stocks'=>$in_stocks,
-                ]);
-    }
-    public function resetCart()
+       public function resetCart()
     {
         Cart::instance('createInstock')->destroy();
 
@@ -192,9 +154,10 @@ class StockController extends Controller
         $part_price_lists=Part_price_list::select('part_price_lists.*')
                         ->where('part_price_lists.id','like','%'.$request->keyword.'%')
                         ->orwhere('part_price_lists.name','like','%'.$request->keyword.'%')
-                        ->orwhere('part_price_lists.rep_new','like','%'.$request->keyword.'%')                        
+                        ->orwhere('part_price_lists.rep_new','like','%'.$request->keyword.'%')
                         ->orwhere('part_price_lists.description','like','%'.$request->keyword.'%');
         $part_price_lists=$part_price_lists->orderBy('id', 'DESC')->paginate(5);
+        $part_price_lists->appends(array('keyword' =>$request->keyword));
         return view('admin.stock.create',['part_price_lists'=>$part_price_lists]);
     }
 
@@ -298,14 +261,14 @@ class StockController extends Controller
         foreach ($list as $buy){
             Cart::instance('editInstock')->add(array('id' => $buy->part_id,
                           'name' => $buy->part_price_list->name, 
-                          'qty' =>$buy->quantity, 
+                          'qty' =>$buy->qty,
                           'price' => $buy->part_price_list->price,
 'options' => array( 'description' => $buy->part_price_list->description,
                           'belongto'=>$buy->belongto,
                           'number' => $buy->number,
                           'barcode_delete' => $buy->barcode,
                           'location'=>$buy->location,
-                           'detail'=>$buy->detail)));
+                           'detail'=>$buy->detail_stk)));
         }
         return redirect('admin/instock/create/edit/'.$id);
     }
@@ -388,13 +351,13 @@ class StockController extends Controller
                     $str = date('Y-m-d');
                     $barcode_temp = $sp->options->belongto . "-" . $sp->id . "-" . $sp->options->location . "-" . $request->inv_no . "-" . $request->po_no . "-" . "$str[2]" . "$str[3]" . "$str[5]" . "$str[6]" . "$str[8]" . "$str[9]" . "-" . $sp->options->number;
                     $ordDetail->barcode = $barcode_temp;
-                    $ordDetail->name = $sp->name;
-                    $ordDetail->quantity = $sp->qty;
+                    $ordDetail->part_name = $sp->name;
+                    $ordDetail->qty = $sp->qty;
                     $ordDetail->balance = $sp->qty;
                     $ordDetail->location = $sp->options->location;
                     $ordDetail->belongto = $sp->options->belongto;
                     $ordDetail->number = $sp->options->number;
-                    $ordDetail->detail = $sp->options->detail;
+                    $ordDetail->detail_stk = $sp->options->detail;
                     $ordDetail->is_deleted = 0;
                     $ordDetail->save();
                     if (in_array($barcode_temp, $array_tmp3, true)) {
@@ -427,6 +390,7 @@ class StockController extends Controller
                         ->orwhere('part_price_lists.rep_new','like','%'.$request->keyword.'%')                        
                          ->orwhere('part_price_lists.description','like','%'.$request->keyword.'%');
         $part_price_lists=$part_price_lists->orderBy('id', 'DESC')->paginate(5);
+        $part_price_lists->appends(array('keyword' =>$request->keyword));
         $in_stocks = In_stock::where('id', $id)->first();
         $in_stocks->save();
         return view('admin.stock.edit',[
@@ -499,11 +463,11 @@ class StockController extends Controller
                 $barcode_temp=$sp->options->belongto."-".$sp->id."-".$sp->options->location."-".$in_stock_->inv_no."-" . $in_stock_->po_no . "-"."$str[2]"."$str[3]"."$str[5]"."$str[6]"."$str[8]"."$str[9]"."-".$sp->options->number;
                 if(in_array($barcode_temp,$array_tmp,true)){ 
                     if(($in_stock_details_tmpo->barcode)==($barcode_temp)&&($in_stock_details_tmpo->part_id)==($sp->id)){
-                    $in_stock_details_tmpo->quantity = $sp->qty;
+                    $in_stock_details_tmpo->qty = $sp->qty;
                     $in_stock_details_tmpo->balance = $sp->qty;
                     $in_stock_details_tmpo->location = $sp->options->location;
                     $in_stock_details_tmpo->belongto = $sp->options->belongto;
-                        $in_stock_details_tmpo->detail = $sp->options->detail;
+                        $in_stock_details_tmpo->detail_stk = $sp->options->detail;
                     $in_stock_details_tmpo->update();    
                    }      
                 }else{
@@ -511,13 +475,13 @@ class StockController extends Controller
                     $list->in_stock_id = $in_stocks->id;
                     $list->part_id = $sp->id;
                     $list->barcode = $barcode_temp; 
-                    $list->name = $sp->name;       
-                    $list->quantity = $sp->qty;
+                    $list->part_name = $sp->name;
+                    $list->qty = $sp->qty;
                     $list->balance = $sp->qty;
                     $list->number = $sp->options->number;
                     $list->location = $sp->options->location;
                     $list->belongto = $sp->options->belongto;
-                    $list->detail = $sp->options->detail;
+                    $list->detail_stk = $sp->options->detail;
                     $list->is_deleted = 0;
                     if(in_array($barcode_temp,$array_tmp,true)){
                     Break;

@@ -7,24 +7,25 @@
     </tr>
     <tr></tr>
     <tr>
+        <th></th>
         <td rowspan="2" colspan="3"> 1st and
             2nd Floor, 3D Center Building, No.3 Duy Tan,<br>
             Dich Vong Hau Ward, Cau Giay District, Hanoi City, Vietnam</td>
-        <th></th>
-        <th></th>
-        <th style="text-align: right">Phone:</th>
 
-        <th colspan="2">(84-24) 37955323</th>
+        <th></th>
+        <th style="text-align: right">Phone: </th>
+
+        <td colspan="2">(84-24) 37955323</td>
     </tr>
     <tr>
         <th></th>
         <th></th>
+        <th style="text-align: right">Fax:  </th>
+        <td colspan="2">(84-24) 37955324</td>
 
-        <th style="text-align: right">Fax :</th>
-        <th colspan="2">(84-24) 37955324</th>
     </tr>
     <tr >
-        <th colspan="3" style="border-top: 1px black dashed;border-bottom:1px black dashed;line-height: 10px">Quotation #: {{$fuji_services->quotation}}</th>
+        <th colspan="3" style="border-top: 1px black dashed;border-bottom:1px black dashed;line-height: 10px">Quotation #:  {{$fuji_services->quotation}}</th>
         <th style="border-top: 1px black dashed;border-bottom:1px black dashed;line-height: 10px"></th>
         <th style="border-top: 1px black dashed;border-bottom:1px black dashed;line-height: 10px"></th>
 
@@ -35,41 +36,44 @@
 
 
     <tr>
-        <th colspan="3">{{$fuji_services->customer->full_name}}</th>
+        <th style=" text-decoration: underline;">To: </th>
+        <th colspan="2"> {{$fuji_services->customer->full_name}}</th>
         <th></th>
         <th></th>
 
 
-        <th style="text-align: right">Valid Until : </th>
-        <th colspan="2"> 1 month </th>
+        <th style="text-align: right">Valid Until: </th>
+        <td colspan="2"> 1 month </td>
 
     </tr>
     <tr>
-        <td rowspan="2" colspan="3"> {{$fuji_services->customer->address}}</td>
+        <th></th>
+        <td rowspan="2" colspan="2"> {{$fuji_services->customer->address}}</td>
 
         <th></th>
-        <th></th>
 
 
-        <td style="text-align: right"> Payment : </td>
-        <td colspan="2"  > 30 Days</td>
+
+        <th colspan="2" style="text-align: right">Service Delivery Term: </th>
+        <td colspan="2"  >DDU</td>
     </tr>
 
     <tr>
     </tr>
     <tr>
-        <th colspan="3">ATTN:</th>
+        <th style=" text-decoration: underline;">Attn: </th>
+        <th colspan="2">{{$fuji_services->customer->person}}</th>
         <th></th>
         <th></th>
+        <th style="text-align: right"> Payment: </th>
+        <td>30 Days</td>
         <th></th>
 
+    </tr>
+    <tr>
+        <th style=" text-decoration: underline;">Tel: </th>
+        <td colspan="2">{{$fuji_services->customer->mobile}}</td>
         <td> </td>
-        <td></td>
-
-    </tr>
-    <tr>
-        <td colspan="3">TEL:</td>
-        <td></td>
         <th></th>
         <th></th>
         <th></th>
@@ -93,31 +97,39 @@
 
     <tr style="border: 1px solid black">
         <td width="1%" rowspan="12" style="border: 1px solid black;text-align: center"> 1</td>
-        <td colspan="4" style="border: none;padding-left: 5px;padding-bottom: 0px; text-align: left">Service charge for repair {{$fuji_services->head_type->name}}{{$fuji_services->head_serial}}</td>
+        <td colspan="4" style="border: none;padding-left: 5px;padding-bottom: 0px; text-align: left">Service charge for repair head {{$fuji_services->customer->name}} {{$fuji_services->head_type->name}} {{$fuji_services->head_serial}}</td>
         <td width="13%"rowspan="12"  style="border: 1px solid black;text-align: center"> 1<br>Package</td>
-        <td  width="13%" rowspan="12" style="border: 1px solid black;text-align: center">
-            {{($fuji_services->head_type->price)+($fuji_services->customer->transport_price)+($fuji_services->part_amount)}}
+        <td  width="13%" rowspan="12" style="border: 1px solid black;text-align: right">
+            {{number_format(($fuji_services->head_charge)+($fuji_services->transport_head_price)+($fuji_services->part_amount)),0,',',','}}
         </td>
-        <td width="13%"rowspan="12" style="border: 1px solid black;text-align: center">
-            {{($fuji_services->head_type->price)+($fuji_services->customer->transport_price)}}
+        <td width="13%"rowspan="12" style="border: 1px solid black;text-align: right">
+            {{number_format(($fuji_services->head_charge)+($fuji_services->part_amount)),0,',',','}}
         </td>
     </tr>
+
     <tr style="border: none" >
         <td colspan="4" rowspan="3" style="border: 1px solid black;border-top-style: none;border-bottom-style:none;padding-top: 0px;padding-bottom: 0px; text-align: left;padding-left: 5px;";> Details:<br>{!! $fuji_services->problem!!}</td>
     </tr>
     <tr></tr> <tr ></tr>
     <tr style="border: none;padding-top: 0px">
-        <td colspan="4" rowspan="8" style="border: 1px solid black;border-top-style: none;padding-top: 0px; text-align: left;padding-left: 5px"> Job: <br> {!! $fuji_services->problem!!}</td>
+        <td colspan="4" rowspan="8" style="border: 1px solid black;border-top-style: none;padding-top: 0px; text-align: left;padding-left: 5px"> Job: <br> {!! $fuji_services->countermeasure!!}</td>
     </tr>
 
      <tr></tr> <tr></tr> <tr></tr> <tr></tr> <tr></tr><tr></tr><tr style="border: 1px solid black">
 
     </tr>
+    <tr style="border: 1px solid black">
+        <th width="1%" style="border: 1px solid black;text-align: center"> 2</th>
+        <th colspan="4" style="border: 1px solid black; text-align: left">Transportation charge (from FMV office to Customer and back)</th>
+        <th width="13%"  style="border: 1px solid black;text-align: center">{{$fuji_services->transfer_head_time}} Trip</th>
+        <th  width="13%"  style="border: 1px solid black;text-align: center">{{number_format($fuji_services->customer->transport_price)}}</th>
+        <th width="13%" style="border: 1px solid black;text-align: right">{{number_format(($fuji_services->transport_head_price),0,',',',')}}</th>
+    </tr>
     <tr>
-        <td style="border: 1px solid black;text-align: center" colspan="6">GRAND TOTAL: </td>
+        <td style="border: none;text-align: center;color: red;font-weight: bold;font-size: 12px" colspan="7">GRAND TOTAL: </td>
 
-        <td  colspan="2" style="border: 1px solid black;text-align: center; color: red;font-weight: bold;font-size: 16px;text-decoration: underline">
-            VND : {{number_format(($fuji_services->head_type->price)+($fuji_services->customer->transport_price)+($fuji_services->part_amount)),0,',',','}}
+        <td  colspan="1" style="border: none;text-align: right; color: red;font-weight: bold;font-size: 12px;text-decoration: underline">
+            VND : {{number_format(($fuji_services->head_charge)-($fuji_services->discount_head)+($fuji_services->transport_head_price)+($fuji_services->part_amount)),0,',',','}}
         </td>
     </tr>
     <tr>
@@ -159,6 +171,7 @@
             2 . Customer is required to provide Tax Incentive Certificate to enjoy its tax incentive (if any)<br>
         </td>
     </tr>
+    <tr><td colspan="8"><br><br></td></tr>
 
     <tr >
         <td rowspan="9"  ></td>

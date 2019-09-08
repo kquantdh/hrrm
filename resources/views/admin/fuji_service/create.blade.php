@@ -1,8 +1,7 @@
 @extends('layouts.admin')
-@section('title') Create Head History @endsection
+@section('title') Create Job History @endsection
 @section('level1') Create new job @endsection
-@section('formName') Create head history @endsection
-
+@section('formName') Create job history @endsection
 @section('content')
         <div class="row">
             <div class="col-md-12">
@@ -45,14 +44,9 @@
                                             <div class="col-md-6">    
                                                     {!! Form::open(['method'=>'GET','url'=>'admin/fujiservice/create']) !!}
                                                     {!!Form::label('sample_file','Typing :',['class'=>'col-md-3'])!!}
-
-                                                    {!! Form::text('keyword',null,["id"=>"input-text1"]) !!}
-                                                   
-                                                  
-                                               
-                                                   {!! Form::submit('Search',["id"=>"input-bt",'class'=>'btn sbold green']) !!}
-                                               
-                                                           {!! Form::close() !!}
+                                                    <input type="text" id="input-text1" name="keyword" value="{{isset(request()->keyword)?request()->keyword:''}}" /></td>
+                                                    {!! Form::submit('Search1',["id"=>"input-bt",'class'=>'btn sbold green']) !!}
+                                                    {!! Form::close() !!}
                                             </div>
                                         </div>
                                 </div>
@@ -62,13 +56,12 @@
                             <thead>
                             <tr>
                                 <th class="numeric">No </th>
-                                
-                                <th class="numeric"> Part No </th>
+                                <th class="numeric">Part No </th>
                                 <th class="numeric"> Part Name </th>
                                 <th class="numeric"> Repnews </th>
                                 <th class="numeric"> Machine</th>
-                                <th class="numeric"> Price </th>
                                 <th class="numeric"> VN name  </th>
+                                <th class="numeric"> Material </th>
                                 <th class="numeric"> Action </th>
                             </tr>
                             </thead>
@@ -82,8 +75,8 @@
                                         <td class="center">{{$item->name}}</td>
                                         <td class="center">{!! $item->rep_new!!}</td>
                                         <td class="center">{{$item->machine}}</td>
-                                        <td class="center"> {{$item->price}} </td>
                                         <td class="center"> {{$item->vn_name}}</td>
+                                        <td class="center"> {{$item->material}} </td>
                                         
                                         <td><a title="Add to Cart" href="{!! url('muahang',[$item->id]) !!}"><i class="fa fa-plus"></i> Add</a></td>
                                     </tr>
@@ -122,7 +115,12 @@
                                 <th> Part No </th>
                                 <th> Part Name </th>
                                 <th> Repnews </th>
-                                <th> Price </th>
+
+                                <th> VN Name </th>
+                                <th> Material </th>
+                                <th> Ref_tax</th>
+                                <th> Imp_ tax</th>
+                                <th> Add_ Fee </th>
                                 <th> Q'ty </th>
                                 <th> Action </th>
                             </tr>
@@ -132,16 +130,26 @@
                             @if(Cart::instance('createFujiService')->count() > 0)
                                 @foreach(Cart::instance('createFujiService')->content() as  $item)
                                     <tr class="odd gradeX">
+                                        {!! Form::open(['method' => 'POST','url' => [ 'admin/fujiservice/create/update-cart', $item->id]]) !!}
                                         <td> </td>
                                         <td> {{$item->id}}</td>
                                         <td>{{$item->name}}</td>
-                                        <td >{!! $item->options->rep_new !!}</td>
-                                        <td>{{$item->price}}</td>
+                                        <td style="width:5%" >
+                                            <input type="text" name="rep_new" value="{!! $item->options->rep_new !!}" style="width:100%" /></td>
+
+                                        <td style="width:5%" >
+                                            <input type="text" name="vn_name" value="{{$item->options->vn_name}}" style="width:100%" /></td>
+                                        <td style="width:5%" >
+                                            <input type="text" name="material" value="{{$item->options->material}}" style="width:100%" /></td>
+                                        <td>{{$item->options->import_tax}}</td>
+                                        <td style="width:5%" >
+                                            <input type="number" name="import_tax" value="{{$item->options->import_tax}}" style="width:100%" /></td>
+                                        <td style="width:5%" >
+                                            <input type="number" name="additional_fee" value="{{$item->options->additional_fee}}" style="width:100%" /></td>
                                         <td style="width:15%">
-                                            {!! Form::open(['method' => 'POST','url' => [ 'admin/fujiservice/create/update-cart', $item->id]]) !!}
                                             <input type="number" name="qty" value="{{$item->qty}}"  style="width:25%"/>
                                             <input type="submit" value="Update"  style="width:35%"/>
-                                            {!! Form::close() !!}
+                                        {!! Form::close() !!}
                                         </td>
                                         <td><a href="{{ url('admin/fujiservice/create/delete/'.$item->id) }}">Delete </a> <br/></td>
                                     </tr>
@@ -164,6 +172,6 @@
 
       
     {!! Form::open(['type'=>'POST','url'=>'admin/fujiservice/create/', 'files'=>'true', 'role'=>'form']) !!}
-    @include('admin.fuji_service.form')
+    @include('admin.fuji_service.form.form_create')
     {!! Form::close() !!}
 @endsection

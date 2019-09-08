@@ -28,6 +28,8 @@ class CreateCustomersTable extends Migration
             $table->float('off_hrs');
             $table->float('holiday_hrs');
             $table->float('transport_price',12,2);
+            $table->float('usd_vnd_rate')->nullable($value=true);
+            $table->float('jpy_vnd_rate')->nullable($value=true);
             $table->timestamps();
         });
     }

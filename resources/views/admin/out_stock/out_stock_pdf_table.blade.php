@@ -89,7 +89,7 @@
     @foreach($list as $key=> $item)
         <tr class="odd gradeX">
             <td>{{$key+1}}  </td>                                        
-            <td>{{$item->in_stock_detail->name}}</td>
+            <td>{{$item->in_stock_detail->part_name}}</td>
             <td>{{$item->in_stock_detail->part_id}}</td>
             <td>{{$item->barcode}}</td>
             <td>{{$item->out_quantity}}</td>

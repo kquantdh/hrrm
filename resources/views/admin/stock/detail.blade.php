@@ -31,7 +31,7 @@
                         <td>{{$item->part_id}}</td>
                         <td>{{$item->name}}</td>
                         <td>{{$item->barcode}}</td>
-                        <td>{{$item->quantity}}</td>
+                        <td>{{$item->qty}}</td>
                         <td>{{$item->belongto}}</td>
                         <td>{{$item->location}}</td>
                     </tr>

@@ -21,24 +21,33 @@ class PricePartListController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {  $limit = 10;
-        $page = $request->get('page',1);
-        $stt = ((int)$page-1)*$limit;
-        
-        $part_price_lists=Part_price_list::select('part_price_lists.*');
 
-        if ($request->fieldChoose=='id'){
-            $part_price_lists->where('part_price_lists.id','like','%'.$request->keyword.'%')
-                ;}
-        if ($request->fieldChoose=='name'){
-            $part_price_lists->where('part_price_lists.name','like','%'.$request->keyword.'%')
-            ;}
-        $part_price_lists=$part_price_lists->orderBy('id', 'DESC')->paginate(10);
-        return view('admin.part_price_list.show_price',
-            ['part_price_lists'=>$part_price_lists,
-                'stt'=>$stt
-                ]);
+    public function  getPartList(Request $request)
+    {
+        $param = [];
+
+        $param['partNo'] = ($request->has('partNo')) ? $request->get('partNo') : '';
+        $param['name'] = ($request->has('name')) ? $request->get('name') : '';
+        $param['description'] = ($request->has('description')) ? $request->get('description') : '';
+        $column = $request->get("columns");
+        $order = $request->get('order');
+        $index=$order[0]["column"];
+        $sort = $order[0]["dir"];
+        $start = $request->get('start');
+        $length = $request->get('length');
+        $columnNameSort = $column[(int)$index]["name"];
+        $data = [];
+        $data['draw'] = (int)$request->get("draw", "int");
+        $dataReport = Part_price_list::searchAndList($param['partNo'],$param['name'],$param['description'],$start, $length, $columnNameSort, $sort);
+        $data['recordsTotal'] = (int)$dataReport['count_record'];
+        $data['recordsFiltered'] = (int)$dataReport['count_record'];
+        $data['data'] = $dataReport['record']->toArray();
+        return response()->json($data);
+    }
+
+    public function index(Request $request)
+    {
+        return view('admin.part_price_list.show_price');
     }
 
     public function create(Request $request)
@@ -70,7 +79,7 @@ class PricePartListController extends Controller
                 $ord->id = $request->id;
                 $ord->name = $request->name;
                 $ord->description = $request->description;
-                $ord->rep_new = $request->rep_new;
+                //$ord->rep_new = $request->rep_new;
                 $ord->machine = $request->machine;
                 $ord->price = $request->price;
                 $ord->vn_name = $request->vn_name;
@@ -108,14 +117,13 @@ class PricePartListController extends Controller
                 'name' => 'Name ',
                 'price' => 'Price ',
                 'detail' => 'Detail ',
-
             ]);
 
         $part_price_lists = Part_price_list::findOrFail($id);
         $part_price_lists->id = $request->id;
         $part_price_lists->name = $request->name;
         $part_price_lists->description = $request->description;
-        $part_price_lists->rep_new = $request->rep_new;
+       // $part_price_lists->rep_new = $request->rep_new;
         $part_price_lists->machine = $request->machine;
         $part_price_lists->price = $request->price;
         $part_price_lists->vn_name = $request->vn_name;
@@ -141,6 +149,7 @@ class PricePartListController extends Controller
             'part_price_lists' => 'required|mimes:xlsx|max:5000',
 
         ]);
+        Part_price_list::truncate();
         if($request->hasFile('part_price_lists')){
             Excel::import(new PartPriceListsImport,$request->file('part_price_lists'),'',\Maatwebsite\Excel\Excel::XLSX);
 

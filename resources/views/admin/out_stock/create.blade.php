@@ -1,8 +1,7 @@
 @extends('layouts.admin')
 @section('title') Create Out Stock @endsection
 @section('content')
-<div class="page-content">
-    <div class="container">
+
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -40,6 +39,10 @@
                                 <div class="col-lg-12">
 
                                     {!! Form::open(['method'=>'GET','url'=>'admin/outstock/create']) !!}
+
+
+
+
                                     <select  name="belongto" id="country" type="text">
                                         <option disabled selected> -- Belong to -- </option>
                                         <option value="1FMV">1FMV</option>
@@ -111,12 +114,12 @@
                                     <td>{{$item->belongto}}</td>
                                     <td>{{$item->barcode}}</td>
                                     <td>{{$item->location}}</td>
-                                    @if(($item->balance)!=($item->quantity))
+                                    @if(($item->balance)!=($item->qty))
                                         <td style="color: red;font-weight: bold">{{$item->balance}}</td>
                                     @else
                                         <td style="font-weight: bold">{{$item->balance}}</td>
                                     @endif
-                                    <td>{{$item->quantity}}</td>
+                                    <td>{{$item->qty}}</td>
                                     <td>{{$item->in_stock->inv_no}}</td>
                                     <td>{{$item->in_stock->po_no}}</td>
                                     <td>{{date('d-m-Y',strtotime($item->in_stock->in_date))}}</td>
@@ -138,6 +141,7 @@
                         </tbody>
                       
                     </table>
+
                     @if($in_stock_details->links())
                     {!! $in_stock_details->links() !!}
                 @endif
@@ -216,9 +220,12 @@
 
     </div>
 </div>
-</div>
-</div>
+
 {!! Form::open(['type'=>'POST','url'=>'admin/outstock/create', 'files'=>'true', 'role'=>'form']) !!}
 @include('admin.out_stock.form')
 {!! Form::close() !!}
+@endsection
+@section('script')
+
+
 @endsection

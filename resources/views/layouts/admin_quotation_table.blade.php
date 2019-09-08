@@ -58,7 +58,7 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- BEGIN HEADER -->
             <div class="page-header">
                 <!-- BEGIN HEADER TOP -->
-                @include('partials.header')
+                <!!--include('partials.header')-->
                 <!-- END HEADER TOP -->
                 <!-- BEGIN HEADER MENU -->
             @include('partials.mainmenu')

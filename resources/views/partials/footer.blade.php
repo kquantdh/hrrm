@@ -1,8 +1,5 @@
 
-<script src="../assets/global/plugins/respond.min.js')}}"></script>
-<script src="../assets/global/plugins/excanvas.min.js')}}"></script>
-<script src="../assets/global/plugins/ie8.fix.min.js')}}"></script>
-<![endif]-->
+
 <!-- BEGIN CORE PLUGINS -->
 <script src="{{asset('js/jquery.min.js')}}" type="text/javascript"></script>
 <script src="{{asset('js/bootstrap.min.js')}}" type="text/javascript"></script>
@@ -40,14 +37,17 @@
 
 
 <!-- BEGIN MODAL -->
+<!-- BEGIN DATE TIME PICKER-->
 <script src="{{asset('js/bootstrap-datepicker.min.js')}}" type="text/javascript"></script>
-
+<script src="{{asset('js/bootstrap-datetimepicker.fr.js')}}" type="text/javascript"></script>
+<script src="{{asset('js/bootstrap-datetimepicker.js')}}" charset="UTF-8"></script>
 <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
-
+<!-- BEGIN DATATABLES-->
 
 <script>
     CKEDITOR.replace( 'form-control ckeditor' );
 </script>
+
 <script>
     $(document).ready(function()
     {
@@ -56,6 +56,21 @@
             $('#radio1003').attr('checked', 'checked');
         });
     })
+</script>
+<!-- BEGIN DATE TIME PICKER-->
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+
+
 </script>
 
 

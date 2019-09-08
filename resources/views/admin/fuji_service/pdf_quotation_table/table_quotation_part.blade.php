@@ -119,10 +119,10 @@
             <td style="padding-left:5px">{{$list->name}}</td>
             <td style="text-align: right">{{$list->quantity}}</td>
             <td style="text-align: right">PC</td>
-            <td style="text-align: right">{{number_format($list->price,0,',',',')}}</td>
+            <td style="text-align: right">{{number_format($list->price*$fuji_services->customer->jpy_rate,0,',',',')}}</td>
             <td style="text-align: right">{{number_format($fuji_services->discount_part,0,',',',')}}%</td>
             <td style="text-align: right">{{number_format($fuji_services->discount_part*$list->price,0,',',',')}}</td>
-            <td style="text-align: right">{{number_format($list->quantity*$list->price*(1-($fuji_services->discount_part/100)),0,',',',')}}</td>
+            <td style="text-align: right">{{number_format($list->quantity*$list->price*$fuji_services->customer->jpy_rate*(1-($fuji_services->discount_part/100)),0,',',',')}}</td>
             <td style="text-align: right"> 6-8 weeks</td>
 
 
@@ -144,7 +144,7 @@
         <th></th>
         <th colspan="2" style="text-align: right">TOTAL JPY: </th>
         <th></th>
-        <th style="text-align: right">{{number_format(($fuji_services->part_amount+$fuji_services->service_amount)*(1-($fuji_services->discount_part/100)),0,',',',')}}</th>
+        <th style="text-align: right">{{number_format(($fuji_services->part_amount_jpy),0,',',',')}}</th>
         <th></th>
     </tr>
     <tr>
