@@ -59,7 +59,7 @@
                             <th> No </th>
                             <th > Part No </th>
                             <th > Part Name </th>
-                            <th > Belong to </th>
+
                             <th > Barcode </th>
                             <th > Location </th>
                             <th> Balance </th>
@@ -77,8 +77,7 @@
                                     <input type="text" class="form-control form-filter input-sm" id="staticPartNo"> </td>
                                 <td>
                                     <input type="text" class="form-control form-filter input-sm" id="staticPartName"></td>
-                                <td>
-                                    <input type="text" class="form-control form-filter input-sm" id="staticBelongto"></td>
+
                                <!-- <td>
                                     <select name="order_status" id="staticBelongto" class="form-control form-filter input-sm">
                                         <option value="">Select...</option>
@@ -262,11 +261,7 @@
                         "name": "part_name",
                         "className":"text-center"
                     },
-                    {
-                        "data": "belongto" ,
-                        "name": "belongto",
-                        "className":"text-left"
-                    },
+
                     {
                         "data": "barcode" ,
                         "name": "barcode",

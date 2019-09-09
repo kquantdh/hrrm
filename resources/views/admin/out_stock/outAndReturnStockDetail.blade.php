@@ -14,7 +14,6 @@
                 <th > Part No </th>
                 <th > Barcode </th>
                 <th > Out Qty </th>
-                <th > Belong to</th>
                 <th > Location</th>
                 <th > Delete</th>
 
@@ -30,7 +29,6 @@
                         <td>{{$item->in_stock_detail->part_id}}</td>
                         <td>{{$item->in_stock_detail->barcode}}</td>
                         <td>{{$item->out_quantity}}</td>
-                        <td>{{$item->in_stock_detail->belongto}}</td>
                         <td>{{$item->in_stock_detail->location}}</td>
                         <td><a href="{{ url('admin/outstock/edit/delete-part/'.$item->id) }}">Delete </a> <br/></td>
                     </tr>

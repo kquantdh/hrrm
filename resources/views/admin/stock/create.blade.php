@@ -116,11 +116,12 @@
                             <thead>
                             <tr>
                                 <th ></th>
-                                <th > Part Number</th>
+                                <th > ID</th>
                                 <th > Part Name </th>
-                                <th > Ref</th>
-                                <th > Belong</th>
-                                <th > No </th>
+
+                                <th > Barcode</th>
+                                <th > No</th>
+
                                 <th > Loc. </th>
                                 <th > Detail </th>
                                 <th > Q'ty </th>
@@ -137,10 +138,10 @@
                                     <tr class="odd gradeX">
                                       {!! Form::open(['method' => 'POST','url' => [ 'admin/instock/create/updatebarcode', $item->id]]) !!}
                                         <td style="width:2%" ></td>
-                                        <td style="width:13%"> {{$item->id}}</td>
-                                        <td style="width:24%">{{$item->name}}</td>
-                                        <td  style="width:3%">{{$item->options->belongto}}</td>
-                                        <td style="width:5%">
+                                        <td style="width:5%"> {{$item->id}}</td>
+                                        <td style="width:15%">{{$item->name}}</td>
+
+                                        <td style="width:25%">
                                             <input type="text" name="belongto" value="{{$item->options->belongto}}" style="width:80%"/></td>
                                         <td style="width:5%" >
                                             <input type="text" name="number" value="{{$item->options->number}}" style="width:100%" /></td>

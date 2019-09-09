@@ -18,7 +18,7 @@
                 <th > Part Name</th>
                 <th > Barcode </th>
                 <th > Qty </th>
-                <th > Belong to </th>
+
                 <th > Location </th>
             </tr>
             </thead>
@@ -29,10 +29,10 @@
                     <tr class="odd gradeX">
                         <td>{{$key+1}}</td>
                         <td>{{$item->part_id}}</td>
-                        <td>{{$item->name}}</td>
+                        <td>{{$item->part_name}}</td>
                         <td>{{$item->barcode}}</td>
                         <td>{{$item->qty}}</td>
-                        <td>{{$item->belongto}}</td>
+
                         <td>{{$item->location}}</td>
                     </tr>
                 @endforeach

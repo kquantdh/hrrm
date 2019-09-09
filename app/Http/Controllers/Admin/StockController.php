@@ -350,7 +350,7 @@ class StockController extends Controller
                     $ordDetail->part_id = $sp->id;
                     $str = date('Y-m-d');
                     $barcode_temp = $sp->options->belongto . "-" . $sp->id . "-" . $sp->options->location . "-" . $request->inv_no . "-" . $request->po_no . "-" . "$str[2]" . "$str[3]" . "$str[5]" . "$str[6]" . "$str[8]" . "$str[9]" . "-" . $sp->options->number;
-                    $ordDetail->barcode = $barcode_temp;
+                    $ordDetail->barcode = $sp->options->belongto;
                     $ordDetail->part_name = $sp->name;
                     $ordDetail->qty = $sp->qty;
                     $ordDetail->balance = $sp->qty;
@@ -360,7 +360,7 @@ class StockController extends Controller
                     $ordDetail->detail_stk = $sp->options->detail;
                     $ordDetail->is_deleted = 0;
                     $ordDetail->save();
-                    if (in_array($barcode_temp, $array_tmp3, true)) {
+                    if (in_array($sp->options->belongto, $array_tmp3, true)) {
                         Session::flash('success', 'Please check barcode. Barcode is only one!');
                         return redirect('/admin/instock/create');
                     } else {
@@ -461,8 +461,8 @@ class StockController extends Controller
           foreach (Cart::instance('editInstock')->content() as $sp)
             {
                 $barcode_temp=$sp->options->belongto."-".$sp->id."-".$sp->options->location."-".$in_stock_->inv_no."-" . $in_stock_->po_no . "-"."$str[2]"."$str[3]"."$str[5]"."$str[6]"."$str[8]"."$str[9]"."-".$sp->options->number;
-                if(in_array($barcode_temp,$array_tmp,true)){ 
-                    if(($in_stock_details_tmpo->barcode)==($barcode_temp)&&($in_stock_details_tmpo->part_id)==($sp->id)){
+                if(in_array($sp->options->belongto,$array_tmp,true)){
+                    if(($in_stock_details_tmpo->barcode)==($sp->options->belongto)&&($in_stock_details_tmpo->part_id)==($sp->id)){
                     $in_stock_details_tmpo->qty = $sp->qty;
                     $in_stock_details_tmpo->balance = $sp->qty;
                     $in_stock_details_tmpo->location = $sp->options->location;
@@ -474,7 +474,7 @@ class StockController extends Controller
                     $list = new In_stock_detail();
                     $list->in_stock_id = $in_stocks->id;
                     $list->part_id = $sp->id;
-                    $list->barcode = $barcode_temp; 
+                    $list->barcode = $sp->options->belongto;
                     $list->part_name = $sp->name;
                     $list->qty = $sp->qty;
                     $list->balance = $sp->qty;
